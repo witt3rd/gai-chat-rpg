@@ -1,0 +1,15 @@
+beanie
+duckduckgo-search
+fastapi
+langchain
+loguru
+motor
+openai
+pymongo
+python-dotenv
+snakemd
+streamlit
+streamlit_chat
+tiktoken
+uvicorn[standard]
+wikipedia
