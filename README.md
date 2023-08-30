@@ -23,7 +23,8 @@ pip install -r requirements.txt
 Start the [streamlit](https://streamlit.io/) auto-reload server:
 
 ```bash
-streamlit run app.py
+cd app
+streamlit run main.py
 ```
 
 ## License
