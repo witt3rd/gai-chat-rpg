@@ -1,5 +1,7 @@
 # ChatRPG
 
+<img src="app/static/hero.jpg" width="704" />
+
 _Generative Realms: AI-driven Dungeons & Dragons_
 
 ## Setup
