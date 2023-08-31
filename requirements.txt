@@ -1,3 +1,4 @@
+bcrypt
 beanie
 duckduckgo-search
 fastapi
