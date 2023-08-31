@@ -10,8 +10,8 @@ from fastapi import FastAPI
 # # Project # #
 from server.database import init_db, drop_db
 from server.routes import (
-    ChatRouter,
-    PersonaRouter,
+    auth as auth_routes,
+    users as user_routes,
 )
 
 ###
@@ -20,14 +20,14 @@ from server.routes import (
 
 app = FastAPI()
 app.include_router(
-    ChatRouter,
-    tags=["Chats"],
-    prefix="/chats",
+    auth_routes.router,
+    tags=["Authentication"],
+    prefix="",
 )
 app.include_router(
-    PersonaRouter,
-    tags=["Personas"],
-    prefix="/personas",
+    user_routes.router,
+    tags=["Users"],
+    prefix="/users",
 )
 
 ###
@@ -59,7 +59,7 @@ async def read_root() -> dict[str, str]:
     """
     Root endpoint for the API.
     """
-    return {"message": "Welcome to the Dittoverse API!"}
+    return {"message": "Welcome to the generated realms of ChatRPG!"}
 
 
 @app.post(

@@ -11,9 +11,7 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 # # Project # #
 from server.config import get_config
 from server.models import (
-    ChatDb,
-    PersonaOut,
-    MessageDb,
+    user as user_models,
 )
 
 ###
@@ -45,9 +43,7 @@ async def init_db() -> None:
     await init_beanie(
         database=AsyncIOMotorDatabase(client, database_name),
         document_models=[
-            ChatDb,
-            PersonaOut,
-            MessageDb,
+            user_models.UserDoc,
         ],
     )
 

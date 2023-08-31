@@ -5,6 +5,7 @@ langchain
 loguru
 motor
 openai
+passlib
 pymongo
 python-dotenv
 snakemd
