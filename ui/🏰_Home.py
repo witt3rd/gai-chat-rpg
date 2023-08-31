@@ -15,7 +15,7 @@ from config import get_config
 
 st.set_page_config(
     page_title="ChatRPG",
-    page_icon="🧙‍♂️",
+    page_icon="🏰",
 )
 
 
@@ -40,21 +40,21 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab_main, tab_char, tab_admin, tab_about = st.tabs(
-    ["Main", "Character", "Admin", "About"]
-)
+# tab_main, tab_char, tab_admin, tab_about = st.tabs(
+#     ["Main", "Character", "Admin", "About"]
+# )
 
-with tab_main:
-    st.markdown("## Main")
+# with tab_main:
+#     st.markdown("## Main")
 
-with tab_char:
-    st.markdown("## Character")
+# with tab_char:
+#     st.markdown("## Character")
 
-with tab_admin:
-    st.markdown("## Admin")
+# with tab_admin:
+#     st.markdown("## Admin")
 
-with tab_about:
-    with open("README.md", "r", encoding="utf-8") as f:
-        readme = f.read()
-    readme = readme.replace("static/", "./app/static/")
-    st.markdown(readme, unsafe_allow_html=True)
+# with tab_about:
+#     with open("README.md", "r", encoding="utf-8") as f:
+#         readme = f.read()
+#     readme = readme.replace("static/", "./app/static/")
+#     st.markdown(readme, unsafe_allow_html=True)

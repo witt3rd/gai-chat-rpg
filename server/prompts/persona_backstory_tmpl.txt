@@ -1,0 +1,2 @@
+{persona} has the following backstory:
+{story}

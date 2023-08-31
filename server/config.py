@@ -35,7 +35,6 @@ class Settings:
     prompts_dir: str
     mongodb_url: str
     mongodb_db: str
-    narrator: str
 
 
 @lru_cache()
@@ -58,6 +57,5 @@ def get_config() -> Settings:
         openai_api_key=os.getenv("OPENAI_API_KEY"),
         prompts_dir=os.getenv("PROMPTS_DIR", "./prompts"),
         mongodb_url=os.getenv("MONGODB_URL", "mongodb://localhost:27017/"),
-        mongodb_db=os.getenv("MONGODB_DB", "dittoverse"),
-        narrator=os.getenv("NARRATOR", "Narrator"),
+        mongodb_db=os.getenv("MONGODB_DB", "chat-rpg"),
     )
