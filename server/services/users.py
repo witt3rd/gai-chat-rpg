@@ -5,7 +5,6 @@ Authentication service.
 
 # # Packages # #
 from loguru import logger
-from passlib.context import CryptContext
 
 # # Project # #
 
@@ -18,14 +17,11 @@ from server.models import (
 ###
 
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-async def username_exists(username: str) -> bool:
+async def name_exists(name: str) -> bool:
     """
     Checks if a user with the given username exists.
     """
-    return await user_models.UserDoc.find({"username": username}).count() > 0
+    return await user_models.UserDoc.find({"name": name}).count() > 0
 
 
 async def email_exists(email: str) -> bool:
@@ -43,5 +39,13 @@ async def create_user(
     """
     doc_data = user_signup.model_dump()
     user_doc = await user_models.UserDoc.create(**doc_data)
-    logger.info(f"Created user {user_doc.username} ({user_doc.id})")
+    logger.info(f"Created user {user_doc.name} ({user_doc.id})")
     return user_doc
+
+
+async def get_all_users() -> list[user_models.UserDoc]:
+    """
+    Get all users.
+    """
+    users = user_models.UserDoc.all()
+    return await users.to_list()

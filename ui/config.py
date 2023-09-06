@@ -32,6 +32,9 @@ class Settings:
     """
 
     server_url: str
+    cookie_name: str
+    cookie_key: str
+    cookie_expiry_days: int
 
 
 @lru_cache()
@@ -52,4 +55,7 @@ def get_config() -> Settings:
     """
     return Settings(
         server_url=os.getenv("SERVER_URL", "http://localhost:8080"),
+        cookie_name=os.getenv("COOKIE_NAME", "chatrpg"),
+        cookie_key=os.getenv("COOKIE_KEY", "chatrpg"),
+        cookie_expiry_days=os.getenv("COOKIE_EXPIRY_DAYS", 0),
     )

@@ -6,11 +6,11 @@ langchain
 loguru
 motor
 openai
-passlib
 pymongo
 python-dotenv
 snakemd
 streamlit
+streamlit-authenticator
 streamlit_chat
 tiktoken
 uvicorn[standard]

@@ -8,9 +8,9 @@ from loguru import logger
 from fastapi import FastAPI
 
 # # Project # #
-from server.database import init_db, drop_db
+from server.database import init_db
 from server.routes import (
-    auth as auth_routes,
+    admin as admin_routes,
     users as user_routes,
 )
 
@@ -20,9 +20,9 @@ from server.routes import (
 
 app = FastAPI()
 app.include_router(
-    auth_routes.router,
-    tags=["Authentication"],
-    prefix="",
+    admin_routes.router,
+    tags=["Admin"],
+    prefix="/admin",
 )
 app.include_router(
     user_routes.router,
@@ -53,22 +53,10 @@ async def on_startup() -> None:
 
 @app.get(
     "/",
-    tags=["root"],
+    tags=["Root"],
 )
-async def read_root() -> dict[str, str]:
+async def get_root() -> str:
     """
     Root endpoint for the API.
     """
-    return {"message": "Welcome to the generated realms of ChatRPG!"}
-
-
-@app.post(
-    "/admin/drop_db",
-    tags=["admin"],
-)
-async def admin_drop_db() -> dict[str, str]:
-    """
-    Root endpoint for the API.
-    """
-    await drop_db()
-    return {"message": "Database dropped!"}
+    return "Welcome to the generated realms of ChatRPG!"
