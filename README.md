@@ -1,5 +1,7 @@
 <p align="center">
-  <img width="140" src="ui/static/hero.jpg" />  
+  <img width="140" src="ui/static/wizard.jpg" />
+  <img width="140" src="ui/static/paladan.jpg" />  
+  <img width="140" src="ui/static/yaeger.jpg" />  
   <h2 align="center">ChatRPG</h2>
   <p align="center">🧙‍♂️ Generative Realms: AI-driven Dungeons & Dragons 🐉</p>
 </p>

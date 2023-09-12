@@ -34,13 +34,13 @@ with open("./ui/style.css", encoding="utf-8") as f:
 
 st.markdown(
     """
-<div class="header-container">
-<img src="app/static/hero.jpg" alt="ChatRPG" class="header-image">
-<div class="header-text">
-    <h2>ChatRPG</h2>
-    <p>Generative Realms: AI-driven Dungeons & Dragons</p>
-</div>
-</div>
+<p align="center">
+  <img width="140" src="app/static/wizard.jpg" />  
+  <img width="140" src="app/static/paladan.jpg" />  
+  <img width="140" src="app/static/yaeger.jpg" />  
+  <h2 align="center">ChatRPG</h2>
+  <p align="center">🧙‍♂️ Generative Realms: AI-driven Dungeons & Dragons 🐉</p>
+</p>
 """,
     unsafe_allow_html=True,
 )
