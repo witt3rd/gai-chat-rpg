@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 SERVER_URL="http://localhost:8080"
 CLIENT_PREFIX="chat_rpg"

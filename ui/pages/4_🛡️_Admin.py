@@ -1,56 +1,84 @@
+# # # System # # #
+
+# # # Packages # # #
+
 import streamlit as st
-import pandas as pd
-import altair as alt
-from urllib.error import URLError
+import chat_rpg_client
+from chat_rpg_client.models.user_out import UserOut
+from chat_rpg_client.rest import ApiException
 
-st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
+# # # Project # # #
+from ui.config import get_config
 
-st.markdown("# DataFrame Demo")
-st.sidebar.header("DataFrame Demo")
-st.write(
-    """This demo shows how to use `st.write` to visualize Pandas DataFrames.
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
+#
+
+st.set_page_config(
+    page_title="🛡️ Admin",
+    page_icon="🛡️",
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-
-@st.cache_data
-def get_UN_data():
-    AWS_BUCKET_URL = "http://streamlit-demo-data.s3-us-west-2.amazonaws.com"
-    df = pd.read_csv(AWS_BUCKET_URL + "/agri.csv.gz")
-    return df.set_index("Region")
-
-
-try:
-    df = get_UN_data()
-    countries = st.multiselect(
-        "Choose countries", list(df.index), ["China", "United States of America"]
+if "client" not in st.session_state:
+    configuration = chat_rpg_client.Configuration(
+        host=get_config().server_url,
     )
-    if not countries:
-        st.error("Please select at least one country.")
-    else:
-        data = df.loc[countries]
-        data /= 1000000.0
-        st.write("### Gross Agricultural Production ($B)", data.sort_index())
+    client = chat_rpg_client.ApiClient(
+        configuration=configuration,
+        header_name="User-Agent",
+        header_value="chat-rpg-client",
+    )
+    st.session_state.client = client
 
-        data = data.T.reset_index()
-        data = pd.melt(data, id_vars=["index"]).rename(
-            columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
+if "users_api" not in st.session_state:
+    client = st.session_state.client
+    users_api = chat_rpg_client.UsersApi(
+        api_client=client,
+    )
+    st.session_state.users_api = users_api
+
+if "users" not in st.session_state:
+    try:
+        # Get Users
+        users_api = st.session_state.users_api
+        users_list = users_api.users_users_get()
+        # convert from an array of users to a dict of users keyed by name
+        users_dict = {}
+        for userd in users_list:
+            user = UserOut.from_dict(userd)
+            users_dict[user.username] = user
+        st.session_state.users = users_dict
+        st.write(users_dict)
+    except ApiException as e:
+        st.exception(
+            "Exception when calling UsersApi->get_users_users_users_get: %s\n" % e
         )
-        chart = (
-            alt.Chart(data)
-            .mark_area(opacity=0.3)
-            .encode(
-                x="year:T",
-                y=alt.Y("Gross Agricultural Product ($B):Q", stack=None),
-                color="Region:N",
+
+st.selectbox(
+    label="Select a user",
+    options=st.session_state.users,
+    index=0,
+    key="user",
+)
+
+with st.form(key="create_user") as form:
+    st.header("Create User")
+
+    st.text_input(label="Username", key="username")
+    st.text_input(label="Name", key="name")
+    st.text_input(label="Email", key="email")
+    st.text_input(label="Password", key="password", type="password")
+
+    if st.form_submit_button(label="Create User"):
+        users_api = st.session_state.users_api
+
+        users_api.user_users_post(
+            user_signup=chat_rpg_client.UserSignup(
+                username=st.session_state.username,
+                name=st.session_state.name,
+                email=st.session_state.email,
+                password=st.session_state.password,
             )
         )
-        st.altair_chart(chart, use_container_width=True)
-except URLError as e:
-    st.error(
-        """
-        **This demo requires internet access.**
-        Connection error: %s
-    """
-        % e.reason
-    )
+
+        st.success("Created!")

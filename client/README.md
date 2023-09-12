@@ -86,12 +86,16 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AdminApi* | [**db_admin_db_delete**](docs/AdminApi.md#db_admin_db_delete) | **DELETE** /admin/db | Delete Db
 *RootApi* | [**root_get**](docs/RootApi.md#root_get) | **GET** / | Get Root
+*UsersApi* | [**user_users_post**](docs/UsersApi.md#user_users_post) | **POST** /users/ | Create User
 *UsersApi* | [**users_users_get**](docs/UsersApi.md#users_users_get) | **GET** /users/ | Get Users
 
 
 ## Documentation For Models
 
+ - [HTTPValidationError](docs/HTTPValidationError.md)
  - [UserOut](docs/UserOut.md)
+ - [UserSignup](docs/UserSignup.md)
+ - [ValidationError](docs/ValidationError.md)
 
 
 <a id="documentation-for-authorization"></a>

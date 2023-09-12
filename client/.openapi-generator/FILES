@@ -13,13 +13,19 @@ chat_rpg_client/api_response.py
 chat_rpg_client/configuration.py
 chat_rpg_client/exceptions.py
 chat_rpg_client/models/__init__.py
+chat_rpg_client/models/http_validation_error.py
 chat_rpg_client/models/user_out.py
+chat_rpg_client/models/user_signup.py
+chat_rpg_client/models/validation_error.py
 chat_rpg_client/py.typed
 chat_rpg_client/rest.py
 docs/AdminApi.md
+docs/HTTPValidationError.md
 docs/RootApi.md
 docs/UserOut.md
+docs/UserSignup.md
 docs/UsersApi.md
+docs/ValidationError.md
 git_push.sh
 pyproject.toml
 requirements.txt
@@ -27,4 +33,5 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
+test/test_user_signup.py
 tox.ini

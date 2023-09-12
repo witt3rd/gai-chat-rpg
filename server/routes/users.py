@@ -40,3 +40,19 @@ async def get_users() -> list[user_models.UserOut]:
     """
     users = await user_services.get_all_users()
     return [user_models.UserOut(**user.dict()) for user in users]
+
+
+@router.post(
+    "/",
+    response_model=user_models.UserOut,
+    status_code=status.HTTP_201_CREATED,
+    description="Create a new user.",
+)
+async def create_user(
+    user: user_models.UserSignup,
+) -> user_models.UserOut:
+    """
+    Create a new user.
+    """
+    user = await user_services.create_user(user)
+    return user_models.UserOut(**user.dict())

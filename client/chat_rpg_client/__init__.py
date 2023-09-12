@@ -33,4 +33,7 @@ from chat_rpg_client.exceptions import ApiAttributeError
 from chat_rpg_client.exceptions import ApiException
 
 # import models into sdk package
+from chat_rpg_client.models.http_validation_error import HTTPValidationError
 from chat_rpg_client.models.user_out import UserOut
+from chat_rpg_client.models.user_signup import UserSignup
+from chat_rpg_client.models.validation_error import ValidationError

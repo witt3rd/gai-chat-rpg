@@ -37,7 +37,7 @@ async def create_user(
     """
     Creates a new user with the given username, email and password.
     """
-    doc_data = user_signup.model_dump()
+    doc_data = user_signup.dict()
     user_doc = await user_models.UserDoc.create(**doc_data)
     logger.info(f"Created user {user_doc.name} ({user_doc.id})")
     return user_doc

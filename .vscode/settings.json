@@ -1,6 +1,7 @@
 {
     "python.analysis.extraPaths": [
         "${workspaceFolder}/",
+        "${workspaceFolder}/client/",
         "${workspaceFolder}/server/",
         "${workspaceFolder}/ui/",
     ]
