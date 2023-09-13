@@ -36,6 +36,8 @@ st.set_page_config(
 
 st.title("🧙 Characters")
 
+st.write(f"Server URL: {st.session_state.server_url}")
+
 st.write(
     """This demo illustrates a combination of plotting and animation with
 Streamlit. We're generating a bunch of random numbers in a loop for around

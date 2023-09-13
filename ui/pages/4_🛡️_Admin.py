@@ -74,7 +74,7 @@ def delete_user() -> None:
 
 if "client" not in st.session_state:
     configuration = client.Configuration(
-        host=get_config().server_url,
+        host=st.session_state.server_url,
     )
     api_client = client.ApiClient(
         configuration=configuration,
