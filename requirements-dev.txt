@@ -1,3 +1,4 @@
 datamodel-code-generator[http]
+flake8
 ipykernel
 watchdog
