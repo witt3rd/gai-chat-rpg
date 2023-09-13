@@ -34,6 +34,7 @@ def create_user() -> None:
             name=st.session_state.name,
             email=st.session_state.email,
             password=st.session_state.password,
+            avatar=st.session_state.avatar,
             is_admin=st.session_state.is_admin,
         )
     )
@@ -51,6 +52,7 @@ def update_user() -> None:
             name=st.session_state.name,
             email=st.session_state.email,
             password=st.session_state.password,
+            avatar=st.session_state.avatar,
             is_admin=st.session_state.is_admin,
         ),
     )
@@ -149,6 +151,14 @@ st.text_input(
     else "",
     key="password",
     type="password",
+)
+print(st.session_state.selected_user)
+st.text_input(
+    label="Avatar",
+    value=st.session_state.selected_user.avatar
+    if st.session_state.selected_user
+    else "",
+    key="avatar",
 )
 st.checkbox(
     label="Is Admin?",

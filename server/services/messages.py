@@ -9,7 +9,9 @@ from loguru import logger
 
 # # Project # #
 from server.models import (
+    campaign as campaign_models,
     message as message_models,
+    user as user_models,
 )
 
 
@@ -28,19 +30,20 @@ async def create_message(
     # message to ensure referential integrity.
 
     # Ensure the campaign exists
-    campaign_doc = await message_models.CampaignDoc.get(campaign)
+    campaign_doc = await campaign_models.CampaignDoc.get(campaign)
     if campaign_doc is None:
         raise ValueError(f"Campaign with id {campaign} does not exist")
 
     # Ensure the sender exists
-    sender_doc = await message_models.UserDoc.get(message_create.sender)
+    sender_doc = await user_models.UserDoc.get(message_create.sender)
     if sender_doc is None:
         raise ValueError(f"User with id {message_create.sender} does not exist")
 
     # Ensure the target exists
-    target_doc = await message_models.UserDoc.get(message_create.target)
-    if target_doc is None:
-        raise ValueError(f"User with id {message_create.target} does not exist")
+    if message_create.target is not None:
+        target_doc = await user_models.UserDoc.get(message_create.target)
+        if target_doc is None:
+            raise ValueError(f"User with id {message_create.target} does not exist")
 
     # Create the message
     message_doc = await message_models.MessageDoc.create(
@@ -53,14 +56,22 @@ async def create_message(
     return message_doc
 
 
-async def all_campaign_messages(
+async def get_campaign_messages(
     campaign: PydanticObjectId,
+    skip: int = 0,
+    limit: int = 100,
 ) -> list[message_models.MessageDoc]:
     """
     Get all messages for a campaign
     """
-    messages = message_models.MessageDoc.find({"campaign": campaign})
-    return await messages.to_list()
+    messages = await message_models.MessageDoc.find(
+        message_models.MessageDoc.campaign == campaign,
+        sort=[("timestamp", 1)],
+        skip=skip,
+        limit=limit,
+    ).to_list()
+    logger.info(f"Got {len(messages)} messages for campaign {campaign}")
+    return messages
 
 
 async def update_message(

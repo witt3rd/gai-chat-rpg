@@ -35,11 +35,34 @@ async def send_message(
     """
     Create a new message
     """
-    message_doc = await message_services.creeate_message(
+    message_doc = await message_services.create_message(
         campaign,
         message,
     )
     return message_models.Message(**message_doc.dict())
+
+
+@router.get(
+    "/{campaign}",
+    response_model=list[message_models.Message],
+    status_code=status.HTTP_200_OK,
+    description="Get all messages for a campaign",
+    operation_id="get_campaign_messages",
+)
+async def get_campaign_messages(
+    campaign: PydanticObjectId,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[message_models.Message]:
+    """
+    Get all messages for a campaign
+    """
+    messages = await message_services.get_campaign_messages(
+        campaign=campaign,
+        skip=skip,
+        limit=limit,
+    )
+    return [message_models.Message(**message.dict()) for message in messages]
 
 
 @router.patch(
@@ -59,11 +82,12 @@ async def update_message(
     print(f"\n\nID: {id}\n{message}\n\n")
     try:
         message_id = PydanticObjectId(id)
-    except InvalidId:
+    except InvalidId as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid message ID.",
-        )
+        ) from exc
+
     message_doc = await message_services.update_message(
         id=message_id,
         message=message,

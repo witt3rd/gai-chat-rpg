@@ -29,8 +29,9 @@ class MessageDoc(Document):
     )
     campaign: PydanticObjectId
     sender: PydanticObjectId
-    target: PydanticObjectId
+    target: PydanticObjectId | None
     content: str = Field(..., min_length=1)
+    is_private: bool = Field(False)
     is_edited: bool = Field(False)
 
     @classmethod
@@ -38,18 +39,21 @@ class MessageDoc(Document):
         cls,
         campaign: PydanticObjectId,
         sender: PydanticObjectId,
-        target: PydanticObjectId,
         content: str,
+        target: PydanticObjectId | None = None,
+        is_private: bool = False,
         is_edited: bool = False,
     ) -> "MessageDoc":
         """
-        Creates a new user with the given username, email and password.
+        Creates a new message with the given campaign, sender, target and content
         """
         message_doc = cls(
             campaign=campaign,
             sender=sender,
             target=target,
             content=content,
+            is_private=is_private,
+            is_edited=is_edited,
         )
         await message_doc.insert()
         return message_doc
@@ -62,8 +66,9 @@ class MessageCreate(BaseModel):
 
     campaign: PydanticObjectId
     sender: PydanticObjectId
-    target: PydanticObjectId
+    target: PydanticObjectId | None = None
     content: str
+    is_private: bool = False
 
     class Config:
         allow_population_by_field_name = True
@@ -80,6 +85,7 @@ class MessageUpdate(BaseModel):
     sender: PydanticObjectId | None = None
     target: PydanticObjectId | None = None
     content: str | None = None
+    is_private: bool | None = None
 
     class Config:
         arbitrary_types_allowed = True
@@ -95,8 +101,9 @@ class Message(BaseModel):
     timestamp: datetime.datetime
     campaign: PydanticObjectId
     sender: PydanticObjectId
-    target: PydanticObjectId
+    target: PydanticObjectId | None
     content: str
+    is_private: bool
     is_edited: bool
 
     class Config:

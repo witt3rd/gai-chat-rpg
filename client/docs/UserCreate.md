@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **name** | **object** |  | 
 **email** | **object** |  | 
 **password** | **object** |  | 
+**avatar** | **object** |  | [optional] 
 
 ## Example
 

@@ -90,6 +90,7 @@ Class | Method | HTTP request | Description
 *CampaignsApi* | [**get_all_campaigns**](docs/CampaignsApi.md#get_all_campaigns) | **GET** /campaigns/ | All Campaigns
 *CampaignsApi* | [**update_campaign**](docs/CampaignsApi.md#update_campaign) | **PATCH** /campaigns/{id} | Update Campaign
 *MessagesApi* | [**delete_message**](docs/MessagesApi.md#delete_message) | **DELETE** /messages/{id} | Delete Message
+*MessagesApi* | [**get_campaign_messages**](docs/MessagesApi.md#get_campaign_messages) | **GET** /messages/{campaign} | Get Campaign Messages
 *MessagesApi* | [**send_message**](docs/MessagesApi.md#send_message) | **POST** /messages/{campaign} | Send Message
 *MessagesApi* | [**update_message**](docs/MessagesApi.md#update_message) | **PATCH** /messages/{id} | Update Message
 *RootApi* | [**get_root**](docs/RootApi.md#get_root) | **GET** / | Get Root

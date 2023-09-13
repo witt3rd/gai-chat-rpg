@@ -30,8 +30,9 @@ class User(BaseModel):
     name: Optional[Any] = Field(...)
     email: Optional[Any] = Field(...)
     password: Optional[Any] = Field(...)
+    avatar: Optional[Any] = None
     is_admin: Optional[Any] = Field(...)
-    __properties = ["_id", "username", "name", "email", "password", "is_admin"]
+    __properties = ["_id", "username", "name", "email", "password", "avatar", "is_admin"]
 
     class Config:
         """Pydantic configuration"""
@@ -82,6 +83,11 @@ class User(BaseModel):
         if self.password is None and "password" in self.__fields_set__:
             _dict['password'] = None
 
+        # set to None if avatar (nullable) is None
+        # and __fields_set__ contains the field
+        if self.avatar is None and "avatar" in self.__fields_set__:
+            _dict['avatar'] = None
+
         # set to None if is_admin (nullable) is None
         # and __fields_set__ contains the field
         if self.is_admin is None and "is_admin" in self.__fields_set__:
@@ -104,6 +110,7 @@ class User(BaseModel):
             "name": obj.get("name"),
             "email": obj.get("email"),
             "password": obj.get("password"),
+            "avatar": obj.get("avatar"),
             "is_admin": obj.get("is_admin")
         })
         return _obj

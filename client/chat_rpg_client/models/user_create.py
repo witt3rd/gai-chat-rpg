@@ -29,7 +29,8 @@ class UserCreate(BaseModel):
     name: Optional[Any] = Field(...)
     email: Optional[Any] = Field(...)
     password: Optional[Any] = Field(...)
-    __properties = ["username", "name", "email", "password"]
+    avatar: Optional[Any] = None
+    __properties = ["username", "name", "email", "password", "avatar"]
 
     class Config:
         """Pydantic configuration"""
@@ -75,6 +76,11 @@ class UserCreate(BaseModel):
         if self.password is None and "password" in self.__fields_set__:
             _dict['password'] = None
 
+        # set to None if avatar (nullable) is None
+        # and __fields_set__ contains the field
+        if self.avatar is None and "avatar" in self.__fields_set__:
+            _dict['avatar'] = None
+
         return _dict
 
     @classmethod
@@ -90,7 +96,8 @@ class UserCreate(BaseModel):
             "username": obj.get("username"),
             "name": obj.get("name"),
             "email": obj.get("email"),
-            "password": obj.get("password")
+            "password": obj.get("password"),
+            "avatar": obj.get("avatar")
         })
         return _obj
 

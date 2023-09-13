@@ -7,8 +7,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **campaign** | **object** |  | 
 **sender** | **object** |  | 
-**target** | **object** |  | 
+**target** | **object** |  | [optional] 
 **content** | **object** |  | 
+**is_private** | **object** |  | [optional] 
 
 ## Example
 

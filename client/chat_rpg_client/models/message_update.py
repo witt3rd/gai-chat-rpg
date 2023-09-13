@@ -29,7 +29,8 @@ class MessageUpdate(BaseModel):
     sender: Optional[Any] = None
     target: Optional[Any] = None
     content: Optional[Any] = None
-    __properties = ["campaign", "sender", "target", "content"]
+    is_private: Optional[Any] = None
+    __properties = ["campaign", "sender", "target", "content", "is_private"]
 
     class Config:
         """Pydantic configuration"""
@@ -75,6 +76,11 @@ class MessageUpdate(BaseModel):
         if self.content is None and "content" in self.__fields_set__:
             _dict['content'] = None
 
+        # set to None if is_private (nullable) is None
+        # and __fields_set__ contains the field
+        if self.is_private is None and "is_private" in self.__fields_set__:
+            _dict['is_private'] = None
+
         return _dict
 
     @classmethod
@@ -90,7 +96,8 @@ class MessageUpdate(BaseModel):
             "campaign": obj.get("campaign"),
             "sender": obj.get("sender"),
             "target": obj.get("target"),
-            "content": obj.get("content")
+            "content": obj.get("content"),
+            "is_private": obj.get("is_private")
         })
         return _obj
 

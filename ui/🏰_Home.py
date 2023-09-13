@@ -45,16 +45,12 @@ st.markdown(
 
 
 if "server_url" not in st.session_state:
-    with st.form("Server URL"):
-        st.text_input(
-            label="Server URL",
-            value=get_config().server_url,
-            key="updated_server_url",
-        )
-        if st.form_submit_button("Submit"):
-            st.session_state.server_url = st.session_state.updated_server_url
-            del st.session_state.updated_server_url
-    st.stop()
+    st.session_state.server_url = get_config().server_url
+
+st.text_input(
+    label="Server URL",
+    key="server_url",
+)
 
 # if "client" not in st.session_state:
 #     configuration = chat_rpg_client.Configuration(

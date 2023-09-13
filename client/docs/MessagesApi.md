@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**delete_message**](MessagesApi.md#delete_message) | **DELETE** /messages/{id} | Delete Message
+[**get_campaign_messages**](MessagesApi.md#get_campaign_messages) | **GET** /messages/{campaign} | Get Campaign Messages
 [**send_message**](MessagesApi.md#send_message) | **POST** /messages/{campaign} | Send Message
 [**update_message**](MessagesApi.md#update_message) | **PATCH** /messages/{id} | Update Message
 
@@ -59,6 +60,77 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**Message**](Message.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful Response |  -  |
+**422** | Validation Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_campaign_messages**
+> object get_campaign_messages(campaign, skip=skip, limit=limit)
+
+Get Campaign Messages
+
+Get all messages for a campaign
+
+### Example
+
+```python
+import time
+import os
+import chat_rpg_client
+from chat_rpg_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = chat_rpg_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with chat_rpg_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = chat_rpg_client.MessagesApi(api_client)
+    campaign = 5eb7cf5a86d9755df3a6c593 # object | 
+    skip = None # object |  (optional)
+    limit = None # object |  (optional)
+
+    try:
+        # Get Campaign Messages
+        api_response = api_instance.get_campaign_messages(campaign, skip=skip, limit=limit)
+        print("The response of MessagesApi->get_campaign_messages:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling MessagesApi->get_campaign_messages: %s\n" % e)
+```
+
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **campaign** | [**object**](.md)|  | 
+ **skip** | [**object**](.md)|  | [optional] 
+ **limit** | [**object**](.md)|  | [optional] 
+
+### Return type
+
+**object**
 
 ### Authorization
 

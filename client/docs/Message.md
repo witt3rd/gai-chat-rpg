@@ -9,8 +9,9 @@ Name | Type | Description | Notes
 **timestamp** | **object** |  | 
 **campaign** | **object** |  | 
 **sender** | **object** |  | 
-**target** | **object** |  | 
+**target** | **object** |  | [optional] 
 **content** | **object** |  | 
+**is_private** | **object** |  | 
 **is_edited** | **object** |  | 
 
 ## Example

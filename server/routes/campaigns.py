@@ -74,11 +74,11 @@ async def update_campaign(
     print(f"\n\nID: {id}\n{campaign}\n\n")
     try:
         campaign_id = PydanticObjectId(id)
-    except InvalidId:
+    except InvalidId as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid campaign ID.",
-        )
+        ) from exc
     campaign_doc = await campaign_services.update_campaign(
         id=campaign_id,
         campaign=campaign,

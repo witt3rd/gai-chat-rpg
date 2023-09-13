@@ -41,7 +41,8 @@ class TestUserCreate(unittest.TestCase):
                 username = None, 
                 name = None, 
                 email = None, 
-                password = None
+                password = None, 
+                avatar = None
             )
         else :
             return UserCreate(

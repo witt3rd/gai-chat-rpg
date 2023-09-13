@@ -44,6 +44,7 @@ class TestMessage(unittest.TestCase):
                 sender = 5eb7cf5a86d9755df3a6c593, 
                 target = 5eb7cf5a86d9755df3a6c593, 
                 content = None, 
+                is_private = None, 
                 is_edited = None
             )
         else :
@@ -52,8 +53,8 @@ class TestMessage(unittest.TestCase):
                 timestamp = None,
                 campaign = 5eb7cf5a86d9755df3a6c593,
                 sender = 5eb7cf5a86d9755df3a6c593,
-                target = 5eb7cf5a86d9755df3a6c593,
                 content = None,
+                is_private = None,
                 is_edited = None,
         )
         """

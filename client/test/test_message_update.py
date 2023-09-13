@@ -41,7 +41,8 @@ class TestMessageUpdate(unittest.TestCase):
                 campaign = 5eb7cf5a86d9755df3a6c593, 
                 sender = 5eb7cf5a86d9755df3a6c593, 
                 target = 5eb7cf5a86d9755df3a6c593, 
-                content = None
+                content = None, 
+                is_private = None
             )
         else :
             return MessageUpdate(

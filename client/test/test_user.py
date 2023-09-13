@@ -43,6 +43,7 @@ class TestUser(unittest.TestCase):
                 name = None, 
                 email = None, 
                 password = None, 
+                avatar = None, 
                 is_admin = None
             )
         else :

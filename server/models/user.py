@@ -31,6 +31,7 @@ class UserDoc(Document):
     name: str = Field(..., max_length=50)
     email: EmailStr
     password: str = Field(..., min_length=6)
+    avatar: str | None = None
     is_admin: bool = Field(False)
 
     @classmethod
@@ -40,6 +41,7 @@ class UserDoc(Document):
         name: str,
         email: str,
         password: str,
+        avatar: str | None = None,
         is_admin: bool = False,
     ) -> "UserDoc":
         """
@@ -50,6 +52,7 @@ class UserDoc(Document):
             name=name,
             email=email,
             password=password,
+            avatar=avatar,
             is_admin=is_admin,
         )
         await user_doc.insert()
@@ -65,6 +68,7 @@ class UserCreate(BaseModel):
     name: str
     email: EmailStr
     password: str
+    avatar: str | None = None
 
 
 class UserUpdate(BaseModel):
@@ -76,6 +80,7 @@ class UserUpdate(BaseModel):
     name: str | None = None
     email: EmailStr | None = None
     password: str | None = None
+    avatar: str | None = None
     is_admin: bool | None = None
 
 
@@ -89,6 +94,7 @@ class User(BaseModel):
     name: str
     email: EmailStr
     password: str
+    avatar: str | None = None
     is_admin: bool
 
     class Config:

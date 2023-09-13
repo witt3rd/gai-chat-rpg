@@ -71,11 +71,11 @@ async def update_user(
     print(f"\n\nID: {id}\n{user}\n\n")
     try:
         user_id = PydanticObjectId(id)
-    except InvalidId:
+    except InvalidId as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid user ID.",
-        )
+        ) from exc
     user_doc = await user_services.update_user(
         id=user_id,
         user=user,
@@ -98,11 +98,11 @@ async def delete_user(
     """
     try:
         user_id = PydanticObjectId(id)
-    except InvalidId:
+    except InvalidId as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid user ID.",
-        )
+        ) from exc
     user_doc = await user_services.delete_user(
         id=user_id,
     )
