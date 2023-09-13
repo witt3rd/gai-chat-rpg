@@ -3,12 +3,14 @@ Game page
 """
 # # # System # # #
 import os
+import asyncio
 
 # # # Packages # # #
 import chat_rpg_client as client
+from PIL import Image
 import streamlit as st
 from streamlit.elements.image import AtomicImage
-from PIL import Image
+import websockets
 
 # # # Project # # #
 
@@ -21,6 +23,20 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+#
+# Websockets
+#
+
+
+async def test():
+    async with websockets.connect("ws://localhost:9000") as websocket:
+        await websocket.send("hello")
+        response = await websocket.recv()
+        print(response)
+
+
+asyncio.run(test())
+# asyncio.get_event_loop().run_until_complete(test())
 
 #
 # Helpers

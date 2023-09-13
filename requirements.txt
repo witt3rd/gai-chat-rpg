@@ -12,7 +12,7 @@ snakemd
 streamlit
 streamlit-authenticator
 streamlit_chat
-streamlit-extras
 tiktoken
 uvicorn[standard]
+websockets
 wikipedia

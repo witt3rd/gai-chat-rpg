@@ -2,12 +2,18 @@
 This module contains the FastAPI application instance and its routes.
 """
 # # System # #
+import asyncio
+import os
 
 # # Packages # #
 from loguru import logger
 from fastapi import FastAPI
+from uvicorn import Config, Server
+import websockets
+
 
 # # Project # #
+from server.config import get_config
 from server.database import init_db
 from server.routes import (
     admin as admin_routes,
@@ -17,6 +23,18 @@ from server.routes import (
 )
 
 ###
+
+#
+# Websockets
+#
+
+
+# create handler for each connection
+async def handler(websocket, path) -> None:
+    data = await websocket.recv()
+    reply = f"Data recieved as:  {data}!"
+    await websocket.send(reply)
+
 
 # Setup FastAPI
 
@@ -74,4 +92,47 @@ async def get_root() -> str:
     """
     Root endpoint for the API.
     """
-    return "Welcome to the generated realms of ChatRPG!"
+    return "Welcome to the generated realms of ChatRPG"
+
+
+#
+# Main
+#
+
+
+async def my_coroutine():
+    # Run another async operation
+    await asyncio.sleep(2)
+    print("Coroutine finished")
+
+
+if __name__ == "__main__":
+    # Start the event loop
+    start_server = websockets.serve(handler, "localhost", 9000)
+
+    loop = asyncio.get_event_loop()
+
+    loop.run_until_complete(start_server)
+    # loop.run_forever()
+
+    # Create a task for the coroutine
+    task = loop.create_task(my_coroutine())
+
+    # Start the FastAPI application
+    watch_dir = os.path.dirname(__file__)
+    config = Config(
+        app="server.app:app",
+        host=get_config().host,
+        port=get_config().port,
+        reload=True,
+        reload_dirs=[str(watch_dir)],
+    )
+
+    # Run the event loop until the task is complete
+    loop.run_until_complete(task)
+
+    # Run the FastAPI application
+    server = Server(config)
+    loop.run_until_complete(server.serve())
+    loop.run_until_complete(server.shutdown())
+    loop.close()

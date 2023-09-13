@@ -35,6 +35,8 @@ class Settings:
     prompts_dir: str
     mongodb_url: str
     mongodb_db: str
+    host: str
+    port: int
 
 
 @lru_cache()
@@ -58,4 +60,6 @@ def get_config() -> Settings:
         prompts_dir=os.getenv("PROMPTS_DIR", "./prompts"),
         mongodb_url=os.getenv("MONGODB_URL", "mongodb://localhost:27017/"),
         mongodb_db=os.getenv("MONGODB_DB", "chat-rpg"),
+        host=os.getenv("HOST", "0.0.0.0"),
+        port=int(os.getenv("PORT", "8080")),
     )
