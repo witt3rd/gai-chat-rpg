@@ -21,15 +21,15 @@ import json
 from typing import Any, Optional
 from pydantic import BaseModel, Field
 
-class UserSignup(BaseModel):
+class MessageCreate(BaseModel):
     """
-    Model to handle data of signup request
+    New message data
     """
-    username: Optional[Any] = Field(...)
-    name: Optional[Any] = Field(...)
-    email: Optional[Any] = Field(...)
-    password: Optional[Any] = Field(...)
-    __properties = ["username", "name", "email", "password"]
+    campaign: Optional[Any] = Field(...)
+    sender: Optional[Any] = Field(...)
+    target: Optional[Any] = Field(...)
+    content: Optional[Any] = Field(...)
+    __properties = ["campaign", "sender", "target", "content"]
 
     class Config:
         """Pydantic configuration"""
@@ -45,8 +45,8 @@ class UserSignup(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> UserSignup:
-        """Create an instance of UserSignup from a JSON string"""
+    def from_json(cls, json_str: str) -> MessageCreate:
+        """Create an instance of MessageCreate from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self):
@@ -55,42 +55,42 @@ class UserSignup(BaseModel):
                           exclude={
                           },
                           exclude_none=True)
-        # set to None if username (nullable) is None
+        # set to None if campaign (nullable) is None
         # and __fields_set__ contains the field
-        if self.username is None and "username" in self.__fields_set__:
-            _dict['username'] = None
+        if self.campaign is None and "campaign" in self.__fields_set__:
+            _dict['campaign'] = None
 
-        # set to None if name (nullable) is None
+        # set to None if sender (nullable) is None
         # and __fields_set__ contains the field
-        if self.name is None and "name" in self.__fields_set__:
-            _dict['name'] = None
+        if self.sender is None and "sender" in self.__fields_set__:
+            _dict['sender'] = None
 
-        # set to None if email (nullable) is None
+        # set to None if target (nullable) is None
         # and __fields_set__ contains the field
-        if self.email is None and "email" in self.__fields_set__:
-            _dict['email'] = None
+        if self.target is None and "target" in self.__fields_set__:
+            _dict['target'] = None
 
-        # set to None if password (nullable) is None
+        # set to None if content (nullable) is None
         # and __fields_set__ contains the field
-        if self.password is None and "password" in self.__fields_set__:
-            _dict['password'] = None
+        if self.content is None and "content" in self.__fields_set__:
+            _dict['content'] = None
 
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> UserSignup:
-        """Create an instance of UserSignup from a dict"""
+    def from_dict(cls, obj: dict) -> MessageCreate:
+        """Create an instance of MessageCreate from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return UserSignup.parse_obj(obj)
+            return MessageCreate.parse_obj(obj)
 
-        _obj = UserSignup.parse_obj({
-            "username": obj.get("username"),
-            "name": obj.get("name"),
-            "email": obj.get("email"),
-            "password": obj.get("password")
+        _obj = MessageCreate.parse_obj({
+            "campaign": obj.get("campaign"),
+            "sender": obj.get("sender"),
+            "target": obj.get("target"),
+            "content": obj.get("content")
         })
         return _obj
 

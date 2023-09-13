@@ -19,18 +19,17 @@ import json
 
 
 from typing import Any, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-class UserIn(BaseModel):
+class UserCreate(BaseModel):
     """
-    Update of user data
+    New user data
     """
-    username: Optional[Any] = None
-    name: Optional[Any] = None
-    email: Optional[Any] = None
-    password: Optional[Any] = None
-    is_admin: Optional[Any] = None
-    __properties = ["username", "name", "email", "password", "is_admin"]
+    username: Optional[Any] = Field(...)
+    name: Optional[Any] = Field(...)
+    email: Optional[Any] = Field(...)
+    password: Optional[Any] = Field(...)
+    __properties = ["username", "name", "email", "password"]
 
     class Config:
         """Pydantic configuration"""
@@ -46,8 +45,8 @@ class UserIn(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> UserIn:
-        """Create an instance of UserIn from a JSON string"""
+    def from_json(cls, json_str: str) -> UserCreate:
+        """Create an instance of UserCreate from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self):
@@ -76,28 +75,22 @@ class UserIn(BaseModel):
         if self.password is None and "password" in self.__fields_set__:
             _dict['password'] = None
 
-        # set to None if is_admin (nullable) is None
-        # and __fields_set__ contains the field
-        if self.is_admin is None and "is_admin" in self.__fields_set__:
-            _dict['is_admin'] = None
-
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> UserIn:
-        """Create an instance of UserIn from a dict"""
+    def from_dict(cls, obj: dict) -> UserCreate:
+        """Create an instance of UserCreate from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return UserIn.parse_obj(obj)
+            return UserCreate.parse_obj(obj)
 
-        _obj = UserIn.parse_obj({
+        _obj = UserCreate.parse_obj({
             "username": obj.get("username"),
             "name": obj.get("name"),
             "email": obj.get("email"),
-            "password": obj.get("password"),
-            "is_admin": obj.get("is_admin")
+            "password": obj.get("password")
         })
         return _obj
 

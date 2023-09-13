@@ -1,4 +1,4 @@
-# UserIn
+# UserUpdate
 
 Update of user data
 
@@ -14,19 +14,19 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from chat_rpg_client.models.user_in import UserIn
+from chat_rpg_client.models.user_update import UserUpdate
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of UserIn from a JSON string
-user_in_instance = UserIn.from_json(json)
+# create an instance of UserUpdate from a JSON string
+user_update_instance = UserUpdate.from_json(json)
 # print the JSON string representation of the object
-print UserIn.to_json()
+print UserUpdate.to_json()
 
 # convert the object into a dict
-user_in_dict = user_in_instance.to_dict()
-# create an instance of UserIn from a dict
-user_in_form_dict = user_in.from_dict(user_in_dict)
+user_update_dict = user_update_instance.to_dict()
+# create an instance of UserUpdate from a dict
+user_update_form_dict = user_update.from_dict(user_update_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

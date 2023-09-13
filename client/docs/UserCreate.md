@@ -1,6 +1,6 @@
-# UserSignup
+# UserCreate
 
-Model to handle data of signup request
+New user data
 
 ## Properties
 Name | Type | Description | Notes
@@ -13,19 +13,19 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from chat_rpg_client.models.user_signup import UserSignup
+from chat_rpg_client.models.user_create import UserCreate
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of UserSignup from a JSON string
-user_signup_instance = UserSignup.from_json(json)
+# create an instance of UserCreate from a JSON string
+user_create_instance = UserCreate.from_json(json)
 # print the JSON string representation of the object
-print UserSignup.to_json()
+print UserCreate.to_json()
 
 # convert the object into a dict
-user_signup_dict = user_signup_instance.to_dict()
-# create an instance of UserSignup from a dict
-user_signup_form_dict = user_signup.from_dict(user_signup_dict)
+user_create_dict = user_create_instance.to_dict()
+# create an instance of UserCreate from a dict
+user_create_form_dict = user_create.from_dict(user_create_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

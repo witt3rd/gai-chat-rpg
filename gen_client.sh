@@ -9,6 +9,11 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
+# Check if a server URL was provided
+if [ $# -eq 1 ]; then
+    SERVER_URL=$1
+fi
+
 # Check if openapi-generator-cli command exists
 if ! command -v openapi-generator-cli &> /dev/null; then
 
@@ -26,6 +31,12 @@ fi
 if ! command -v curl &> /dev/null; then
     echo -e "${RED}curl not found. Please install curl before running this script.${NC}"
     exit 1
+fi
+
+# Remove existing client directory if it exists
+if [ -d "client" ]; then
+    echo -e "${GREEN}Removing existing client directory...${NC}"
+    rm -rf client
 fi
 
 echo -e "${GREEN}Creating client directory...${NC}"

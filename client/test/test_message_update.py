@@ -16,11 +16,11 @@ import unittest
 import datetime
 
 import chat_rpg_client
-from chat_rpg_client.models.user_signup import UserSignup  # noqa: E501
+from chat_rpg_client.models.message_update import MessageUpdate  # noqa: E501
 from chat_rpg_client.rest import ApiException
 
-class TestUserSignup(unittest.TestCase):
-    """UserSignup unit test stubs"""
+class TestMessageUpdate(unittest.TestCase):
+    """MessageUpdate unit test stubs"""
 
     def setUp(self):
         pass
@@ -29,31 +29,27 @@ class TestUserSignup(unittest.TestCase):
         pass
 
     def make_instance(self, include_optional):
-        """Test UserSignup
+        """Test MessageUpdate
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `UserSignup`
+        # uncomment below to create an instance of `MessageUpdate`
         """
-        model = chat_rpg_client.models.user_signup.UserSignup()  # noqa: E501
+        model = chat_rpg_client.models.message_update.MessageUpdate()  # noqa: E501
         if include_optional :
-            return UserSignup(
-                username = None, 
-                name = None, 
-                email = None, 
-                password = None
+            return MessageUpdate(
+                campaign = 5eb7cf5a86d9755df3a6c593, 
+                sender = 5eb7cf5a86d9755df3a6c593, 
+                target = 5eb7cf5a86d9755df3a6c593, 
+                content = None
             )
         else :
-            return UserSignup(
-                username = None,
-                name = None,
-                email = None,
-                password = None,
+            return MessageUpdate(
         )
         """
 
-    def testUserSignup(self):
-        """Test UserSignup"""
+    def testMessageUpdate(self):
+        """Test MessageUpdate"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

@@ -14,8 +14,14 @@
 
 
 # import models into model package
+from chat_rpg_client.models.campaign import Campaign
+from chat_rpg_client.models.campaign_create import CampaignCreate
+from chat_rpg_client.models.campaign_update import CampaignUpdate
 from chat_rpg_client.models.http_validation_error import HTTPValidationError
-from chat_rpg_client.models.user_in import UserIn
-from chat_rpg_client.models.user_out import UserOut
-from chat_rpg_client.models.user_signup import UserSignup
+from chat_rpg_client.models.message import Message
+from chat_rpg_client.models.message_create import MessageCreate
+from chat_rpg_client.models.message_update import MessageUpdate
+from chat_rpg_client.models.user import User
+from chat_rpg_client.models.user_create import UserCreate
+from chat_rpg_client.models.user_update import UserUpdate
 from chat_rpg_client.models.validation_error import ValidationError

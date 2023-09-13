@@ -1,21 +1,21 @@
-# chat_rpg_client.UsersApi
+# chat_rpg_client.CampaignsApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_user**](UsersApi.md#create_user) | **POST** /users/ | Create User
-[**delete_user**](UsersApi.md#delete_user) | **DELETE** /users/{id} | Delete User
-[**get_all_users**](UsersApi.md#get_all_users) | **GET** /users/ | All Users
-[**update_user**](UsersApi.md#update_user) | **PATCH** /users/{id} | Update User
+[**create_campaign**](CampaignsApi.md#create_campaign) | **POST** /campaigns/ | Create Campaign
+[**delete_campaign**](CampaignsApi.md#delete_campaign) | **DELETE** /campaigns/{id} | Delete Campaign
+[**get_all_campaigns**](CampaignsApi.md#get_all_campaigns) | **GET** /campaigns/ | All Campaigns
+[**update_campaign**](CampaignsApi.md#update_campaign) | **PATCH** /campaigns/{id} | Update Campaign
 
 
-# **create_user**
-> User create_user(user_create)
+# **create_campaign**
+> Campaign create_campaign(campaign_create)
 
-Create User
+Create Campaign
 
-Create a new user
+Create a new campaign
 
 ### Example
 
@@ -23,8 +23,8 @@ Create a new user
 import time
 import os
 import chat_rpg_client
-from chat_rpg_client.models.user import User
-from chat_rpg_client.models.user_create import UserCreate
+from chat_rpg_client.models.campaign import Campaign
+from chat_rpg_client.models.campaign_create import CampaignCreate
 from chat_rpg_client.rest import ApiException
 from pprint import pprint
 
@@ -38,16 +38,16 @@ configuration = chat_rpg_client.Configuration(
 # Enter a context with an instance of the API client
 with chat_rpg_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = chat_rpg_client.UsersApi(api_client)
-    user_create = chat_rpg_client.UserCreate() # UserCreate | 
+    api_instance = chat_rpg_client.CampaignsApi(api_client)
+    campaign_create = chat_rpg_client.CampaignCreate() # CampaignCreate | 
 
     try:
-        # Create User
-        api_response = api_instance.create_user(user_create)
-        print("The response of UsersApi->create_user:\n")
+        # Create Campaign
+        api_response = api_instance.create_campaign(campaign_create)
+        print("The response of CampaignsApi->create_campaign:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling UsersApi->create_user: %s\n" % e)
+        print("Exception when calling CampaignsApi->create_campaign: %s\n" % e)
 ```
 
 
@@ -56,11 +56,11 @@ with chat_rpg_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user_create** | [**UserCreate**](UserCreate.md)|  | 
+ **campaign_create** | [**CampaignCreate**](CampaignCreate.md)|  | 
 
 ### Return type
 
-[**User**](User.md)
+[**Campaign**](Campaign.md)
 
 ### Authorization
 
@@ -79,12 +79,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **delete_user**
-> User delete_user(id)
+# **delete_campaign**
+> Campaign delete_campaign(id)
 
-Delete User
+Delete Campaign
 
-Delete a user
+Delete a campaign
 
 ### Example
 
@@ -92,7 +92,7 @@ Delete a user
 import time
 import os
 import chat_rpg_client
-from chat_rpg_client.models.user import User
+from chat_rpg_client.models.campaign import Campaign
 from chat_rpg_client.rest import ApiException
 from pprint import pprint
 
@@ -106,16 +106,16 @@ configuration = chat_rpg_client.Configuration(
 # Enter a context with an instance of the API client
 with chat_rpg_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = chat_rpg_client.UsersApi(api_client)
+    api_instance = chat_rpg_client.CampaignsApi(api_client)
     id = None # object | 
 
     try:
-        # Delete User
-        api_response = api_instance.delete_user(id)
-        print("The response of UsersApi->delete_user:\n")
+        # Delete Campaign
+        api_response = api_instance.delete_campaign(id)
+        print("The response of CampaignsApi->delete_campaign:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling UsersApi->delete_user: %s\n" % e)
+        print("Exception when calling CampaignsApi->delete_campaign: %s\n" % e)
 ```
 
 
@@ -128,7 +128,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**User**](User.md)
+[**Campaign**](Campaign.md)
 
 ### Authorization
 
@@ -147,12 +147,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get_all_users**
-> object get_all_users()
+# **get_all_campaigns**
+> object get_all_campaigns()
 
-All Users
+All Campaigns
 
-Get all users
+Get all campaigns
 
 ### Example
 
@@ -173,15 +173,15 @@ configuration = chat_rpg_client.Configuration(
 # Enter a context with an instance of the API client
 with chat_rpg_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = chat_rpg_client.UsersApi(api_client)
+    api_instance = chat_rpg_client.CampaignsApi(api_client)
 
     try:
-        # All Users
-        api_response = api_instance.get_all_users()
-        print("The response of UsersApi->get_all_users:\n")
+        # All Campaigns
+        api_response = api_instance.get_all_campaigns()
+        print("The response of CampaignsApi->get_all_campaigns:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling UsersApi->get_all_users: %s\n" % e)
+        print("Exception when calling CampaignsApi->get_all_campaigns: %s\n" % e)
 ```
 
 
@@ -209,12 +209,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **update_user**
-> User update_user(id, user_update)
+# **update_campaign**
+> Campaign update_campaign(id, campaign_update)
 
-Update User
+Update Campaign
 
-Update a user
+Update a campaign
 
 ### Example
 
@@ -222,8 +222,8 @@ Update a user
 import time
 import os
 import chat_rpg_client
-from chat_rpg_client.models.user import User
-from chat_rpg_client.models.user_update import UserUpdate
+from chat_rpg_client.models.campaign import Campaign
+from chat_rpg_client.models.campaign_update import CampaignUpdate
 from chat_rpg_client.rest import ApiException
 from pprint import pprint
 
@@ -237,17 +237,17 @@ configuration = chat_rpg_client.Configuration(
 # Enter a context with an instance of the API client
 with chat_rpg_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = chat_rpg_client.UsersApi(api_client)
+    api_instance = chat_rpg_client.CampaignsApi(api_client)
     id = None # object | 
-    user_update = chat_rpg_client.UserUpdate() # UserUpdate | 
+    campaign_update = chat_rpg_client.CampaignUpdate() # CampaignUpdate | 
 
     try:
-        # Update User
-        api_response = api_instance.update_user(id, user_update)
-        print("The response of UsersApi->update_user:\n")
+        # Update Campaign
+        api_response = api_instance.update_campaign(id, campaign_update)
+        print("The response of CampaignsApi->update_campaign:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling UsersApi->update_user: %s\n" % e)
+        print("Exception when calling CampaignsApi->update_campaign: %s\n" % e)
 ```
 
 
@@ -257,11 +257,11 @@ with chat_rpg_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | [**object**](.md)|  | 
- **user_update** | [**UserUpdate**](UserUpdate.md)|  | 
+ **campaign_update** | [**CampaignUpdate**](CampaignUpdate.md)|  | 
 
 ### Return type
 
-[**User**](User.md)
+[**Campaign**](Campaign.md)
 
 ### Authorization
 

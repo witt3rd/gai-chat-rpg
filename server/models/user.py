@@ -5,7 +5,7 @@ User models
 # # System # #
 
 # # Packages # #
-from beanie import Document
+from beanie import Document, PydanticObjectId
 from pydantic import BaseModel, EmailStr, Field
 from pymongo import IndexModel, ASCENDING
 
@@ -15,11 +15,16 @@ from pymongo import IndexModel, ASCENDING
 
 
 class UserDoc(Document):
+    """
+    User database document
+    """
+
     class Settings:
         collection = "users"
         indexes = [
             IndexModel([("username", ASCENDING)], unique=True),
             IndexModel([("email", ASCENDING)], unique=True),
+            IndexModel([("name", ASCENDING)], unique=False),
         ]
 
     username: str = Field(..., max_length=50)
@@ -51,9 +56,9 @@ class UserDoc(Document):
         return user_doc
 
 
-class UserSignup(BaseModel):
+class UserCreate(BaseModel):
     """
-    Model to handle data of signup request
+    New user data
     """
 
     username: str
@@ -62,7 +67,7 @@ class UserSignup(BaseModel):
     password: str
 
 
-class UserIn(BaseModel):
+class UserUpdate(BaseModel):
     """
     Update of user data
     """
@@ -74,14 +79,19 @@ class UserIn(BaseModel):
     is_admin: bool | None = None
 
 
-class UserOut(BaseModel):
+class User(BaseModel):
     """
     Output of user data
     """
 
-    id: str
+    id: PydanticObjectId = Field(..., alias="_id")
     username: str
     name: str
     email: EmailStr
     password: str
     is_admin: bool
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {PydanticObjectId: str}

@@ -1,96 +1,150 @@
+"""
+Campaigns page
+"""
+# # # System # # #
+
+# # # Packages # # #
+import chat_rpg_client as client
 import streamlit as st
-import pandas as pd
-import pydeck as pdk
-from urllib.error import URLError
 
-st.set_page_config(page_title="Mapping Demo", page_icon="🌍")
+# # # Project # # #
+from ui.util.config import get_config
 
-st.markdown("# Mapping Demo")
-st.sidebar.header("Mapping Demo")
-st.write(
-    """This demo shows how to use
-[`st.pydeck_chart`](https://docs.streamlit.io/library/api-reference/charts/st.pydeck_chart)
-to display geospatial data."""
+#
+
+st.set_page_config(
+    page_title="Campaign",
+    page_icon="🗺️",
+    # layout="wide",
+    initial_sidebar_state="expanded",
 )
 
 
-@st.cache_data
-def from_data_file(filename):
-    url = (
-        "http://raw.githubusercontent.com/streamlit/"
-        "example-data/master/hello/v1/%s" % filename
-    )
-    return pd.read_json(url)
+#
+# Callbacks (_before_ the state is managed, so we can make changes)
+#
 
 
-try:
-    ALL_LAYERS = {
-        "Bike Rentals": pdk.Layer(
-            "HexagonLayer",
-            data=from_data_file("bike_rental_stats.json"),
-            get_position=["lon", "lat"],
-            radius=200,
-            elevation_scale=4,
-            elevation_range=[0, 1000],
-            extruded=True,
-        ),
-        "Bart Stop Exits": pdk.Layer(
-            "ScatterplotLayer",
-            data=from_data_file("bart_stop_stats.json"),
-            get_position=["lon", "lat"],
-            get_color=[200, 30, 0, 160],
-            get_radius="[exits]",
-            radius_scale=0.05,
-        ),
-        "Bart Stop Names": pdk.Layer(
-            "TextLayer",
-            data=from_data_file("bart_stop_stats.json"),
-            get_position=["lon", "lat"],
-            get_text="name",
-            get_color=[0, 0, 0, 200],
-            get_size=15,
-            get_alignment_baseline="'bottom'",
-        ),
-        "Outbound Flow": pdk.Layer(
-            "ArcLayer",
-            data=from_data_file("bart_path_stats.json"),
-            get_source_position=["lon", "lat"],
-            get_target_position=["lon2", "lat2"],
-            get_source_color=[200, 30, 0, 160],
-            get_target_color=[200, 30, 0, 160],
-            auto_highlight=True,
-            width_scale=0.0001,
-            get_width="outbound",
-            width_min_pixels=3,
-            width_max_pixels=30,
-        ),
-    }
-    st.sidebar.markdown("### Map Layers")
-    selected_layers = [
-        layer
-        for layer_name, layer in ALL_LAYERS.items()
-        if st.sidebar.checkbox(layer_name, True)
-    ]
-    if selected_layers:
-        st.pydeck_chart(
-            pdk.Deck(
-                map_style="mapbox://styles/mapbox/light-v9",
-                initial_view_state={
-                    "latitude": 37.76,
-                    "longitude": -122.4,
-                    "zoom": 11,
-                    "pitch": 50,
-                },
-                layers=selected_layers,
-            )
+def create_campaign() -> None:
+    campaigns_api = st.session_state.campaigns_api
+
+    campaigns_api.create_campaign(
+        campaign_create=client.CampaignCreate(
+            name=st.session_state.name,
         )
-    else:
-        st.error("Please choose at least one layer above.")
-except URLError as e:
-    st.error(
-        """
-        **This demo requires internet access.**
-        Connection error: %s
-    """
-        % e.reason
+    )
+    del st.session_state.campaigns
+    st.success("Created!")
+
+
+def update_campaign() -> None:
+    campaigns_api = st.session_state.campaigns_api
+
+    campaigns_api.update_campaign(
+        id=str(st.session_state.selected_campaign.id),
+        campaign_update=client.CampaignUpdate(
+            name=st.session_state.name,
+        ),
+    )
+    del st.session_state.campaigns
+    st.success("Updated!")
+
+
+def delete_campaign() -> None:
+    campaigns_api = st.session_state.campaigns_api
+
+    campaigns_api.delete_campaign(
+        id=st.session_state.selected_campaign.id,
+    )
+    del st.session_state.campaigns
+    st.success("Deleted!")
+
+
+#
+# State initialization
+#
+
+if "client" not in st.session_state:
+    configuration = client.Configuration(
+        host=get_config().server_url,
+    )
+    api_client = client.ApiClient(
+        configuration=configuration,
+        header_name="User-Agent",
+        header_value="chat-rpg-client",
+    )
+    st.session_state.client = api_client
+
+if "campaigns_api" not in st.session_state:
+    api_client = st.session_state.client
+    campaigns_api = client.CampaignsApi(
+        api_client=api_client,
+    )
+    st.session_state.campaigns_api = campaigns_api
+
+if "campaigns" not in st.session_state:
+    try:
+        # Get Campaigns
+        campaigns_api = st.session_state.campaigns_api
+        campaigns = [
+            client.Campaign(**campaign)
+            for campaign in campaigns_api.get_all_campaigns()
+        ]
+        st.session_state.campaigns = campaigns
+    except client.ApiException as e:
+        st.exception(f"Exception when calling CampaignsApi->get_all_campaigns: {e}\n")
+
+#
+# UI
+#
+
+st.title("🗺️ Campaign")
+st.markdown("---")
+
+campaign_names = [campaign.name for campaign in st.session_state.campaigns]
+
+selected_campaign = st.selectbox(
+    label="Select a campaign or add new",
+    options=["Add new campaign"] + campaign_names,
+    index=0,
+    key="selected_campaign_name",
+)
+
+st.session_state.selected_campaign = None
+for campaign in st.session_state.campaigns:
+    if campaign.name == st.session_state.selected_campaign_name:
+        st.session_state.selected_campaign = campaign
+        break
+
+st.text_input(
+    label="Name",
+    value=st.session_state.selected_campaign.name
+    if st.session_state.selected_campaign
+    else "",
+    key="name",
+)
+col1, col2 = st.columns(2)
+if st.session_state.selected_campaign:
+    col1.button(
+        label="Update Campaign",
+        on_click=update_campaign,
+        use_container_width=True,
+    )
+    col2.button(
+        label="Delete Campaign",
+        on_click=delete_campaign,
+        use_container_width=True,
+        type="primary",
+    )
+else:
+    col1.button(
+        label="Create Campaign",
+        on_click=create_campaign,
+        use_container_width=True,
+    )
+    col2.button(
+        label="Delete Campaign",
+        on_click=delete_campaign,
+        use_container_width=True,
+        disabled=True,
     )

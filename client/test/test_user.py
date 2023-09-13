@@ -16,11 +16,11 @@ import unittest
 import datetime
 
 import chat_rpg_client
-from chat_rpg_client.models.user_in import UserIn  # noqa: E501
+from chat_rpg_client.models.user import User  # noqa: E501
 from chat_rpg_client.rest import ApiException
 
-class TestUserIn(unittest.TestCase):
-    """UserIn unit test stubs"""
+class TestUser(unittest.TestCase):
+    """User unit test stubs"""
 
     def setUp(self):
         pass
@@ -29,27 +29,35 @@ class TestUserIn(unittest.TestCase):
         pass
 
     def make_instance(self, include_optional):
-        """Test UserIn
+        """Test User
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `UserIn`
+        # uncomment below to create an instance of `User`
         """
-        model = chat_rpg_client.models.user_in.UserIn()  # noqa: E501
+        model = chat_rpg_client.models.user.User()  # noqa: E501
         if include_optional :
-            return UserIn(
+            return User(
+                id = 5eb7cf5a86d9755df3a6c593, 
                 username = None, 
                 name = None, 
                 email = None, 
-                password = None
+                password = None, 
+                is_admin = None
             )
         else :
-            return UserIn(
+            return User(
+                id = 5eb7cf5a86d9755df3a6c593,
+                username = None,
+                name = None,
+                email = None,
+                password = None,
+                is_admin = None,
         )
         """
 
-    def testUserIn(self):
-        """Test UserIn"""
+    def testUser(self):
+        """Test User"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

@@ -28,10 +28,10 @@ class TestRootApi(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_root_get(self):
-        """Test case for root_get
+    def test_get_root(self):
+        """Test case for get_root
 
-        Read Root  # noqa: E501
+        Get Root  # noqa: E501
         """
         pass
 

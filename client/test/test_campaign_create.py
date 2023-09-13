@@ -16,11 +16,11 @@ import unittest
 import datetime
 
 import chat_rpg_client
-from chat_rpg_client.models.user_out import UserOut  # noqa: E501
+from chat_rpg_client.models.campaign_create import CampaignCreate  # noqa: E501
 from chat_rpg_client.rest import ApiException
 
-class TestUserOut(unittest.TestCase):
-    """UserOut unit test stubs"""
+class TestCampaignCreate(unittest.TestCase):
+    """CampaignCreate unit test stubs"""
 
     def setUp(self):
         pass
@@ -29,31 +29,25 @@ class TestUserOut(unittest.TestCase):
         pass
 
     def make_instance(self, include_optional):
-        """Test UserOut
+        """Test CampaignCreate
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `UserOut`
+        # uncomment below to create an instance of `CampaignCreate`
         """
-        model = chat_rpg_client.models.user_out.UserOut()  # noqa: E501
+        model = chat_rpg_client.models.campaign_create.CampaignCreate()  # noqa: E501
         if include_optional :
-            return UserOut(
-                name = None, 
-                email = None, 
-                password = None, 
-                is_admin = None
+            return CampaignCreate(
+                name = None
             )
         else :
-            return UserOut(
+            return CampaignCreate(
                 name = None,
-                email = None,
-                password = None,
-                is_admin = None,
         )
         """
 
-    def testUserOut(self):
-        """Test UserOut"""
+    def testCampaignCreate(self):
+        """Test CampaignCreate"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

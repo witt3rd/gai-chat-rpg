@@ -1,5 +1,5 @@
 """
-Authentication service.
+User services
 """
 # # System # #
 
@@ -8,8 +8,6 @@ from beanie import PydanticObjectId
 from loguru import logger
 
 # # Project # #
-
-# from server.config import get_config
 from server.models import (
     user as user_models,
 )
@@ -20,25 +18,25 @@ from server.models import (
 
 async def name_exists(name: str) -> bool:
     """
-    Checks if a user with the given username exists.
+    Checks if a user with the given username exists
     """
     return await user_models.UserDoc.find({"name": name}).count() > 0
 
 
 async def email_exists(email: str) -> bool:
     """
-    Checks if a user with the given email exists.
+    Checks if a user with the given email exists
     """
     return await user_models.UserDoc.find({"email": email}).count() > 0
 
 
 async def create_user(
-    user_signup: user_models.UserSignup,
+    user_create: user_models.UserCreate,
 ) -> user_models.UserDoc:
     """
-    Creates a new user with the given username, email and password.
+    Creates a new user with the given username, email and password
     """
-    doc_data = user_signup.dict()
+    doc_data = user_create.dict()
     user_doc = await user_models.UserDoc.create(**doc_data)
     logger.info(f"Created user {user_doc.name} ({user_doc.id})")
     return user_doc
@@ -46,18 +44,18 @@ async def create_user(
 
 async def all_users() -> list[user_models.UserDoc]:
     """
-    Get all users.
+    Get all users
     """
     users = user_models.UserDoc.all()
     return await users.to_list()
 
 
 async def update_user(
-    id: str,
-    user: user_models.UserIn,
+    id: PydanticObjectId,
+    user: user_models.UserUpdate,
 ) -> user_models.UserDoc:
     """
-    Updates a user with the given username, email and password.
+    Updates a user with the given username, email and password
     """
     user_doc = await user_models.UserDoc.get(id)
     if user_doc is None:
@@ -68,10 +66,10 @@ async def update_user(
 
 
 async def delete_user(
-    id: str,
+    id: PydanticObjectId,
 ) -> user_models.UserDoc:
     """
-    Deletes a user with the given username, email and password.
+    Deletes a user
     """
     user_doc = await user_models.UserDoc.get(id)
     if user_doc is None:

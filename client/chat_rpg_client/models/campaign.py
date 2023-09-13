@@ -21,17 +21,13 @@ import json
 from typing import Any, Optional
 from pydantic import BaseModel, Field
 
-class UserOut(BaseModel):
+class Campaign(BaseModel):
     """
-    Output of user data
+    Output of campaign data
     """
-    id: Optional[Any] = Field(...)
-    username: Optional[Any] = Field(...)
+    id: Optional[Any] = Field(..., alias="_id")
     name: Optional[Any] = Field(...)
-    email: Optional[Any] = Field(...)
-    password: Optional[Any] = Field(...)
-    is_admin: Optional[Any] = Field(...)
-    __properties = ["id", "username", "name", "email", "password", "is_admin"]
+    __properties = ["_id", "name"]
 
     class Config:
         """Pydantic configuration"""
@@ -47,8 +43,8 @@ class UserOut(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> UserOut:
-        """Create an instance of UserOut from a JSON string"""
+    def from_json(cls, json_str: str) -> Campaign:
+        """Create an instance of Campaign from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self):
@@ -60,51 +56,27 @@ class UserOut(BaseModel):
         # set to None if id (nullable) is None
         # and __fields_set__ contains the field
         if self.id is None and "id" in self.__fields_set__:
-            _dict['id'] = None
-
-        # set to None if username (nullable) is None
-        # and __fields_set__ contains the field
-        if self.username is None and "username" in self.__fields_set__:
-            _dict['username'] = None
+            _dict['_id'] = None
 
         # set to None if name (nullable) is None
         # and __fields_set__ contains the field
         if self.name is None and "name" in self.__fields_set__:
             _dict['name'] = None
 
-        # set to None if email (nullable) is None
-        # and __fields_set__ contains the field
-        if self.email is None and "email" in self.__fields_set__:
-            _dict['email'] = None
-
-        # set to None if password (nullable) is None
-        # and __fields_set__ contains the field
-        if self.password is None and "password" in self.__fields_set__:
-            _dict['password'] = None
-
-        # set to None if is_admin (nullable) is None
-        # and __fields_set__ contains the field
-        if self.is_admin is None and "is_admin" in self.__fields_set__:
-            _dict['is_admin'] = None
-
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> UserOut:
-        """Create an instance of UserOut from a dict"""
+    def from_dict(cls, obj: dict) -> Campaign:
+        """Create an instance of Campaign from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return UserOut.parse_obj(obj)
+            return Campaign.parse_obj(obj)
 
-        _obj = UserOut.parse_obj({
-            "id": obj.get("id"),
-            "username": obj.get("username"),
-            "name": obj.get("name"),
-            "email": obj.get("email"),
-            "password": obj.get("password"),
-            "is_admin": obj.get("is_admin")
+        _obj = Campaign.parse_obj({
+            "id": obj.get("_id"),
+            "name": obj.get("name")
         })
         return _obj
 

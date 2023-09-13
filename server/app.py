@@ -11,6 +11,8 @@ from fastapi import FastAPI
 from server.database import init_db
 from server.routes import (
     admin as admin_routes,
+    campaigns as campaign_routes,
+    messages as message_routes,
     users as user_routes,
 )
 
@@ -23,6 +25,16 @@ app.include_router(
     admin_routes.router,
     tags=["Admin"],
     prefix="/admin",
+)
+app.include_router(
+    campaign_routes.router,
+    tags=["Campaigns"],
+    prefix="/campaigns",
+)
+app.include_router(
+    message_routes.router,
+    tags=["Messages"],
+    prefix="/messages",
 )
 app.include_router(
     user_routes.router,

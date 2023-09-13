@@ -28,17 +28,10 @@ class TestAdminApi(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_db_admin_db_delete(self):
-        """Test case for db_admin_db_delete
+    def test_drop_db(self):
+        """Test case for drop_db
 
-        Drop Db  # noqa: E501
-        """
-        pass
-
-    def test_db_admin_db_delete_0(self):
-        """Test case for db_admin_db_delete_0
-
-        Drop Db  # noqa: E501
+        Delete Db  # noqa: E501
         """
         pass
 

@@ -4,5 +4,7 @@
         "${workspaceFolder}/client/",
         "${workspaceFolder}/server/",
         "${workspaceFolder}/ui/",
-    ]
+    ],
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
 }

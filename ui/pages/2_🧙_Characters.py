@@ -1,11 +1,41 @@
-import streamlit as st
+"""
+Game page
+"""
+# # # System # # #
 import time
 import numpy as np
 
-st.set_page_config(page_title="Plotting Demo", page_icon="📈")
+# # # Packages # # #
+import chat_rpg_client as client
+import streamlit as st
 
-st.markdown("# Plotting Demo")
-st.sidebar.header("Plotting Demo")
+# # # Project # # #
+from ui.util.config import get_config
+
+#
+
+st.set_page_config(
+    page_title="Characters",
+    page_icon="🧙",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
+#
+# Callbacks (_before_ the state is managed, so we can make changes)
+#
+
+
+#
+# State initialization
+#
+
+#
+# UI
+#
+
+st.title("🧙 Characters")
+
 st.write(
     """This demo illustrates a combination of plotting and animation with
 Streamlit. We're generating a bunch of random numbers in a loop for around

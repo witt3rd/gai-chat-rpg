@@ -85,6 +85,13 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AdminApi* | [**drop_db**](docs/AdminApi.md#drop_db) | **DELETE** /admin/db | Delete Db
+*CampaignsApi* | [**create_campaign**](docs/CampaignsApi.md#create_campaign) | **POST** /campaigns/ | Create Campaign
+*CampaignsApi* | [**delete_campaign**](docs/CampaignsApi.md#delete_campaign) | **DELETE** /campaigns/{id} | Delete Campaign
+*CampaignsApi* | [**get_all_campaigns**](docs/CampaignsApi.md#get_all_campaigns) | **GET** /campaigns/ | All Campaigns
+*CampaignsApi* | [**update_campaign**](docs/CampaignsApi.md#update_campaign) | **PATCH** /campaigns/{id} | Update Campaign
+*MessagesApi* | [**delete_message**](docs/MessagesApi.md#delete_message) | **DELETE** /messages/{id} | Delete Message
+*MessagesApi* | [**send_message**](docs/MessagesApi.md#send_message) | **POST** /messages/{campaign} | Send Message
+*MessagesApi* | [**update_message**](docs/MessagesApi.md#update_message) | **PATCH** /messages/{id} | Update Message
 *RootApi* | [**get_root**](docs/RootApi.md#get_root) | **GET** / | Get Root
 *UsersApi* | [**create_user**](docs/UsersApi.md#create_user) | **POST** /users/ | Create User
 *UsersApi* | [**delete_user**](docs/UsersApi.md#delete_user) | **DELETE** /users/{id} | Delete User
@@ -94,10 +101,16 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Campaign](docs/Campaign.md)
+ - [CampaignCreate](docs/CampaignCreate.md)
+ - [CampaignUpdate](docs/CampaignUpdate.md)
  - [HTTPValidationError](docs/HTTPValidationError.md)
- - [UserIn](docs/UserIn.md)
- - [UserOut](docs/UserOut.md)
- - [UserSignup](docs/UserSignup.md)
+ - [Message](docs/Message.md)
+ - [MessageCreate](docs/MessageCreate.md)
+ - [MessageUpdate](docs/MessageUpdate.md)
+ - [User](docs/User.md)
+ - [UserCreate](docs/UserCreate.md)
+ - [UserUpdate](docs/UserUpdate.md)
  - [ValidationError](docs/ValidationError.md)
 
 

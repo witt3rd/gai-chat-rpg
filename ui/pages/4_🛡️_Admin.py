@@ -1,3 +1,6 @@
+"""
+Admin page
+"""
 # # # System # # #
 
 # # # Packages # # #
@@ -10,7 +13,7 @@ from ui.util.config import get_config
 #
 
 st.set_page_config(
-    page_title="🛡️ Admin",
+    page_title="Admin",
     page_icon="🛡️",
     # layout="wide",
     initial_sidebar_state="expanded",
@@ -26,7 +29,7 @@ def create_user() -> None:
     users_api = st.session_state.users_api
 
     users_api.create_user(
-        user_signup=client.UserSignup(
+        user_create=client.UserCreate(
             username=st.session_state.username,
             name=st.session_state.name,
             email=st.session_state.email,
@@ -42,8 +45,8 @@ def update_user() -> None:
     users_api = st.session_state.users_api
 
     users_api.update_user(
-        id=st.session_state.selected_user.id,
-        user_in=client.UserIn(
+        id=str(st.session_state.selected_user.id),
+        user_update=client.UserUpdate(
             username=st.session_state.username,
             name=st.session_state.name,
             email=st.session_state.email,
@@ -91,95 +94,91 @@ if "users" not in st.session_state:
     try:
         # Get Users
         users_api = st.session_state.users_api
-        users = [client.UserOut(**user) for user in users_api.get_all_users()]
-        print(f"{users}")
+        users = [client.User(**user) for user in users_api.get_all_users()]
         st.session_state.users = users
     except client.ApiException as e:
-        st.exception(
-            "Exception when calling UsersApi->get_users_users_users_get: %s\n" % e
-        )
+        st.exception(f"Exception when calling UsersApi->get_all_users: {e}\n")
 
 #
 # UI
 #
 
 st.title("🛡️ Admin")
+st.markdown("---")
 
-# st.header("Users")
-with st.expander("🧙 Users", expanded=True):
-    usernames = [user.username for user in st.session_state.users]
+st.header("👤 Users")
 
-    selected_user = st.selectbox(
-        label="Select a user or add new",
-        options=["Add new user"] + usernames,
-        index=0,
-        key="selected_username",
-    )
+usernames = [user.username for user in st.session_state.users]
 
-    st.session_state.selected_user = None
-    for user in st.session_state.users:
-        if user.username == st.session_state.selected_username:
-            st.session_state.selected_user = user
-            break
+selected_user = st.selectbox(
+    label="Select a user or add new",
+    options=["Add new user"] + usernames,
+    index=0,
+    key="selected_username",
+)
 
-    st.text_input(
-        label="Username",
-        value=st.session_state.selected_user.username
-        if st.session_state.selected_user
-        else "",
-        key="username",
+st.session_state.selected_user = None
+for user in st.session_state.users:
+    if user.username == st.session_state.selected_username:
+        st.session_state.selected_user = user
+        break
+
+st.text_input(
+    label="Username",
+    value=st.session_state.selected_user.username
+    if st.session_state.selected_user
+    else "",
+    key="username",
+)
+st.text_input(
+    label="Name",
+    value=st.session_state.selected_user.name if st.session_state.selected_user else "",
+    key="name",
+)
+st.text_input(
+    label="Email",
+    value=st.session_state.selected_user.email
+    if st.session_state.selected_user
+    else "",
+    key="email",
+)
+st.text_input(
+    label="Password",
+    value=st.session_state.selected_user.password
+    if st.session_state.selected_user
+    else "",
+    key="password",
+    type="password",
+)
+st.checkbox(
+    label="Is Admin?",
+    value=st.session_state.selected_user.is_admin
+    if st.session_state.selected_user
+    else False,
+    key="is_admin",
+)
+col1, col2 = st.columns(2)
+if st.session_state.selected_user:
+    col1.button(
+        label="Update User",
+        on_click=update_user,
+        use_container_width=True,
     )
-    st.text_input(
-        label="Name",
-        value=st.session_state.selected_user.name
-        if st.session_state.selected_user
-        else "",
-        key="name",
+    col2.button(
+        label="Delete User",
+        on_click=delete_user,
+        use_container_width=True,
+        type="primary",
     )
-    st.text_input(
-        label="Email",
-        value=st.session_state.selected_user.email
-        if st.session_state.selected_user
-        else "",
-        key="email",
+else:
+    col1.button(
+        label="Create User",
+        on_click=create_user,
+        use_container_width=True,
     )
-    st.text_input(
-        label="Password",
-        value=st.session_state.selected_user.password
-        if st.session_state.selected_user
-        else "",
-        key="password",
-        type="password",
+    col2.button(
+        label="Delete User",
+        on_click=delete_user,
+        use_container_width=True,
+        disabled=True,
     )
-    st.checkbox(
-        label="Is Admin?",
-        value=st.session_state.selected_user.is_admin
-        if st.session_state.selected_user
-        else False,
-        key="is_admin",
-    )
-    col1, col2 = st.columns(2)
-    if st.session_state.selected_user:
-        col1.button(
-            label="Update User",
-            on_click=update_user,
-            use_container_width=True,
-        )
-        col2.button(
-            label="Delete User",
-            on_click=delete_user,
-            use_container_width=True,
-            type="primary",
-        )
-    else:
-        col1.button(
-            label="Create User",
-            on_click=create_user,
-            use_container_width=True,
-        )
-        col2.button(
-            label="Delete User",
-            on_click=delete_user,
-            use_container_width=True,
-            disabled=True,
-        )

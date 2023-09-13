@@ -6,9 +6,7 @@ import streamlit_authenticator as stauth
 from streamlit_chat import message
 
 # # Project # #
-import chat_rpg_client
-from chat_rpg_client.models.user_out import UserOut
-from chat_rpg_client.rest import ApiException
+import chat_rpg_client as client
 from ui.util.config import get_config
 
 

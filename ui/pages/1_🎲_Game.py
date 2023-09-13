@@ -1,3 +1,6 @@
+"""
+Game page
+"""
 # # # System # # #
 
 # # # Packages # # #
@@ -10,7 +13,7 @@ from ui.util.config import get_config
 #
 
 st.set_page_config(
-    page_title="🎲 Game",
+    page_title="Game",
     page_icon="🎲",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -47,13 +50,32 @@ if "users" not in st.session_state:
     try:
         # Get Users
         users_api = st.session_state.users_api
-        users = [client.UserOut(**user) for user in users_api.get_all_users()]
-        print(f"{users}")
+        users = [client.User(**user) for user in users_api.get_all_users()]
         st.session_state.users = users
     except client.ApiException as e:
         st.exception(
             "Exception when calling UsersApi->get_users_users_users_get: %s\n" % e
         )
+
+if "campaigns_api" not in st.session_state:
+    api_client = st.session_state.client
+    campaigns_api = client.CampaignsApi(
+        api_client=api_client,
+    )
+    st.session_state.campaigns_api = campaigns_api
+
+if "campaigns" not in st.session_state:
+    try:
+        # Get Campaigns
+        campaigns_api = st.session_state.campaigns_api
+        campaigns = [
+            client.Campaign(**campaign)
+            for campaign in campaigns_api.get_all_campaigns()
+        ]
+        st.session_state.campaigns = campaigns
+    except client.ApiException as e:
+        st.exception(f"Exception when calling CampaignsApi->get_all_campaigns: {e}\n")
+
 
 #
 # UI
@@ -63,10 +85,6 @@ st.title("🎲 Game")
 
 st.header("Campaigns")
 
-
-campaigns = [
-    "The Lost Mine of Phandelver",
-]
 
 st.selectbox(
     label="Select a user",
@@ -78,10 +96,16 @@ st.selectbox(
 
 st.selectbox(
     label="Select a campaign",
-    options=campaigns,
+    options=st.session_state.campaigns,
     index=0,
     key="campaign",
+    format_func=lambda campaign: campaign.name,
 )
 
 
-st.markdown(f"# {st.session_state.campaign} for {st.session_state.user.name}")
+name = st.session_state.user.username if st.session_state.user else None
+campaign_name = st.session_state.campaign.name if st.session_state.campaign else None
+if name and campaign_name:
+    st.markdown(f"### Hello {name}! You are playing in the {campaign_name} campaign.")
+else:
+    st.write("Please select a user and campaign")
