@@ -103,9 +103,44 @@ st.selectbox(
 )
 
 
+if "messages" not in st.session_state:
+    ms = [
+        {
+            "sender": "Dungeon Master",
+            "target": "All",
+            "content": "Welcome to the game!",
+        },
+        {
+            "sender": "Thor",
+            "target": "All",
+            "content": "/dan roll 1d20",
+        },
+    ]
+    st.session_state.messages = ms
+
 name = st.session_state.user.username if st.session_state.user else None
 campaign_name = st.session_state.campaign.name if st.session_state.campaign else None
 if name and campaign_name:
     st.markdown(f"### Hello {name}! You are playing in the {campaign_name} campaign.")
 else:
     st.write("Please select a user and campaign")
+
+for message in st.session_state.messages:
+    with st.chat_message(
+        name=message["sender"] if message["sender"] != "Dungeon Master" else "AI",
+    ):
+        st.write(f"**{message['sender']}** says to **{message['target']}**:")
+        st.write(message["content"])
+
+
+prompt = st.chat_input("Say something")
+if prompt:
+    st.write(f"User has sent the following prompt: {prompt}")
+    m = {
+        "sender": st.session_state.user.username,
+        "target": "All",
+        "content": prompt,
+    }
+    print(f"Sending message: {m}")
+    st.session_state.messages.append(m)
+    st.experimental_rerun()
