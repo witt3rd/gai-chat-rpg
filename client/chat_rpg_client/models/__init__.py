@@ -15,6 +15,7 @@
 
 # import models into model package
 from chat_rpg_client.models.http_validation_error import HTTPValidationError
+from chat_rpg_client.models.user_in import UserIn
 from chat_rpg_client.models.user_out import UserOut
 from chat_rpg_client.models.user_signup import UserSignup
 from chat_rpg_client.models.validation_error import ValidationError

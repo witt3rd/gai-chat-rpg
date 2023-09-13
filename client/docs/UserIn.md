@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **name** | **object** |  | [optional] 
 **email** | **object** |  | [optional] 
 **password** | **object** |  | [optional] 
+**is_admin** | **object** |  | [optional] 
 
 ## Example
 

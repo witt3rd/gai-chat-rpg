@@ -17,6 +17,9 @@ router = APIRouter()
 
 @router.delete(
     "/db",
+    status_code=200,
+    description="Drop the database.",
+    operation_id="drop_db",
 )
 async def delete_db() -> str:
     """

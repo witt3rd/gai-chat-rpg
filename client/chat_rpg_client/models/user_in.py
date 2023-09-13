@@ -29,7 +29,8 @@ class UserIn(BaseModel):
     name: Optional[Any] = None
     email: Optional[Any] = None
     password: Optional[Any] = None
-    __properties = ["username", "name", "email", "password"]
+    is_admin: Optional[Any] = None
+    __properties = ["username", "name", "email", "password", "is_admin"]
 
     class Config:
         """Pydantic configuration"""
@@ -75,6 +76,11 @@ class UserIn(BaseModel):
         if self.password is None and "password" in self.__fields_set__:
             _dict['password'] = None
 
+        # set to None if is_admin (nullable) is None
+        # and __fields_set__ contains the field
+        if self.is_admin is None and "is_admin" in self.__fields_set__:
+            _dict['is_admin'] = None
+
         return _dict
 
     @classmethod
@@ -90,7 +96,8 @@ class UserIn(BaseModel):
             "username": obj.get("username"),
             "name": obj.get("name"),
             "email": obj.get("email"),
-            "password": obj.get("password")
+            "password": obj.get("password"),
+            "is_admin": obj.get("is_admin")
         })
         return _obj
 

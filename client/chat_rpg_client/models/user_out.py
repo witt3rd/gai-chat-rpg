@@ -25,12 +25,13 @@ class UserOut(BaseModel):
     """
     Output of user data
     """
+    id: Optional[Any] = Field(...)
     username: Optional[Any] = Field(...)
     name: Optional[Any] = Field(...)
     email: Optional[Any] = Field(...)
     password: Optional[Any] = Field(...)
     is_admin: Optional[Any] = Field(...)
-    __properties = ["username", "name", "email", "password", "is_admin"]
+    __properties = ["id", "username", "name", "email", "password", "is_admin"]
 
     class Config:
         """Pydantic configuration"""
@@ -56,6 +57,11 @@ class UserOut(BaseModel):
                           exclude={
                           },
                           exclude_none=True)
+        # set to None if id (nullable) is None
+        # and __fields_set__ contains the field
+        if self.id is None and "id" in self.__fields_set__:
+            _dict['id'] = None
+
         # set to None if username (nullable) is None
         # and __fields_set__ contains the field
         if self.username is None and "username" in self.__fields_set__:
@@ -93,6 +99,7 @@ class UserOut(BaseModel):
             return UserOut.parse_obj(obj)
 
         _obj = UserOut.parse_obj({
+            "id": obj.get("id"),
             "username": obj.get("username"),
             "name": obj.get("name"),
             "email": obj.get("email"),

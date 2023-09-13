@@ -1,13 +1,11 @@
 # # # System # # #
 
 # # # Packages # # #
-
+import chat_rpg_client as client
 import streamlit as st
-import chat_rpg_client
-from chat_rpg_client.models.user_out import UserOut
-from chat_rpg_client.rest import ApiException
 
 # # # Project # # #
+from ui.util.config import get_config
 
 #
 
@@ -18,35 +16,52 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+#
+# Callbacks (_before_ the state is managed, so we can make changes)
+#
+
+
+#
+# State initialization
+#
+
 if "client" not in st.session_state:
-    configuration = chat_rpg_client.Configuration(
+    configuration = client.Configuration(
         host=get_config().server_url,
     )
-
-    client = chat_rpg_client.ApiClient(configuration)
-    st.session_state.client = client
+    api_client = client.ApiClient(
+        configuration=configuration,
+        header_name="User-Agent",
+        header_value="chat-rpg-client",
+    )
+    st.session_state.client = api_client
 
 if "users_api" not in st.session_state:
-    client = st.session_state.client
-    users_api = chat_rpg_client.UsersApi(client)
+    api_client = st.session_state.client
+    users_api = client.UsersApi(
+        api_client=api_client,
+    )
     st.session_state.users_api = users_api
 
 if "users" not in st.session_state:
     try:
         # Get Users
         users_api = st.session_state.users_api
-        users_list = users_api.users_users_get()
-        # convert from an array of users to a dict of users keyed by name
-        users_dict = {}
-        for userd in users_list:
-            user = UserOut.from_dict(userd)
-            users_dict[user.username] = user
-        st.session_state.users = users_dict
-        st.write(users_dict)
-    except ApiException as e:
+        users = [client.UserOut(**user) for user in users_api.get_all_users()]
+        print(f"{users}")
+        st.session_state.users = users
+    except client.ApiException as e:
         st.exception(
             "Exception when calling UsersApi->get_users_users_users_get: %s\n" % e
         )
+
+#
+# UI
+#
+
+st.title("🎲 Game")
+
+st.header("Campaigns")
 
 
 campaigns = [
@@ -58,6 +73,7 @@ st.selectbox(
     options=st.session_state.users,
     index=0,
     key="user",
+    format_func=lambda user: user.username,
 )
 
 st.selectbox(
@@ -68,4 +84,4 @@ st.selectbox(
 )
 
 
-st.markdown(f"# {st.session_state.campaign} for {st.session_state.user}")
+st.markdown(f"# {st.session_state.campaign} for {st.session_state.user.name}")

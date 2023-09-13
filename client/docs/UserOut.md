@@ -5,6 +5,7 @@ Output of user data
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**id** | **object** |  | 
 **username** | **object** |  | 
 **name** | **object** |  | 
 **email** | **object** |  | 

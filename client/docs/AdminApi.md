@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**db_admin_db_delete**](AdminApi.md#db_admin_db_delete) | **DELETE** /admin/db | Delete Db
+[**drop_db**](AdminApi.md#drop_db) | **DELETE** /admin/db | Delete Db
 
 
-# **db_admin_db_delete**
-> object db_admin_db_delete()
+# **drop_db**
+> object drop_db()
 
 Delete Db
 
-Root endpoint for the API.
+Drop the database.
 
 ### Example
 
@@ -37,11 +37,11 @@ with chat_rpg_client.ApiClient(configuration) as api_client:
 
     try:
         # Delete Db
-        api_response = api_instance.db_admin_db_delete()
-        print("The response of AdminApi->db_admin_db_delete:\n")
+        api_response = api_instance.drop_db()
+        print("The response of AdminApi->drop_db:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling AdminApi->db_admin_db_delete: %s\n" % e)
+        print("Exception when calling AdminApi->drop_db: %s\n" % e)
 ```
 
 

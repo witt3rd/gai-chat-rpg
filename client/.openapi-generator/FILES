@@ -14,6 +14,7 @@ chat_rpg_client/configuration.py
 chat_rpg_client/exceptions.py
 chat_rpg_client/models/__init__.py
 chat_rpg_client/models/http_validation_error.py
+chat_rpg_client/models/user_in.py
 chat_rpg_client/models/user_out.py
 chat_rpg_client/models/user_signup.py
 chat_rpg_client/models/validation_error.py
@@ -22,6 +23,7 @@ chat_rpg_client/rest.py
 docs/AdminApi.md
 docs/HTTPValidationError.md
 docs/RootApi.md
+docs/UserIn.md
 docs/UserOut.md
 docs/UserSignup.md
 docs/UsersApi.md
@@ -33,5 +35,4 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
-test/test_user_signup.py
 tox.ini

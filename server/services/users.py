@@ -4,6 +4,7 @@ Authentication service.
 # # System # #
 
 # # Packages # #
+from beanie import PydanticObjectId
 from loguru import logger
 
 # # Project # #
@@ -43,9 +44,38 @@ async def create_user(
     return user_doc
 
 
-async def get_all_users() -> list[user_models.UserDoc]:
+async def all_users() -> list[user_models.UserDoc]:
     """
     Get all users.
     """
     users = user_models.UserDoc.all()
     return await users.to_list()
+
+
+async def update_user(
+    id: str,
+    user: user_models.UserIn,
+) -> user_models.UserDoc:
+    """
+    Updates a user with the given username, email and password.
+    """
+    user_doc = await user_models.UserDoc.get(id)
+    if user_doc is None:
+        raise ValueError(f"User with id {id} does not exist")
+    await user_doc.set(user.dict())
+    logger.info(f"Updated user: {user_doc})")
+    return user_doc
+
+
+async def delete_user(
+    id: str,
+) -> user_models.UserDoc:
+    """
+    Deletes a user with the given username, email and password.
+    """
+    user_doc = await user_models.UserDoc.get(id)
+    if user_doc is None:
+        raise ValueError(f"User with id {id} does not exist")
+    await user_doc.delete()
+    logger.info(f"Deleted user: {user_doc})")
+    return user_doc

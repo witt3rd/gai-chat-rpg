@@ -54,6 +54,9 @@ async def on_startup() -> None:
 @app.get(
     "/",
     tags=["Root"],
+    status_code=200,
+    description="Root endpoint for the API.",
+    operation_id="get_root",
 )
 async def get_root() -> str:
     """

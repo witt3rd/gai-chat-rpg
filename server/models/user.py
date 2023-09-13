@@ -71,6 +71,7 @@ class UserIn(BaseModel):
     name: str | None = None
     email: EmailStr | None = None
     password: str | None = None
+    is_admin: bool | None = None
 
 
 class UserOut(BaseModel):
@@ -78,6 +79,7 @@ class UserOut(BaseModel):
     Output of user data
     """
 
+    id: str
     username: str
     name: str
     email: EmailStr

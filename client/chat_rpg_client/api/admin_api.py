@@ -43,14 +43,14 @@ class AdminApi(object):
         self.api_client = api_client
 
     @validate_arguments
-    def db_admin_db_delete(self, **kwargs) -> object:  # noqa: E501
+    def drop_db(self, **kwargs) -> object:  # noqa: E501
         """Delete Db  # noqa: E501
 
-        Root endpoint for the API.  # noqa: E501
+        Drop the database.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.db_admin_db_delete(async_req=True)
+        >>> thread = api.drop_db(async_req=True)
         >>> result = thread.get()
 
         :param async_req: Whether to execute the request asynchronously.
@@ -66,18 +66,18 @@ class AdminApi(object):
         """
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
-            raise ValueError("Error! Please call the db_admin_db_delete_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.db_admin_db_delete_with_http_info(**kwargs)  # noqa: E501
+            raise ValueError("Error! Please call the drop_db_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
+        return self.drop_db_with_http_info(**kwargs)  # noqa: E501
 
     @validate_arguments
-    def db_admin_db_delete_with_http_info(self, **kwargs) -> ApiResponse:  # noqa: E501
+    def drop_db_with_http_info(self, **kwargs) -> ApiResponse:  # noqa: E501
         """Delete Db  # noqa: E501
 
-        Root endpoint for the API.  # noqa: E501
+        Drop the database.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.db_admin_db_delete_with_http_info(async_req=True)
+        >>> thread = api.drop_db_with_http_info(async_req=True)
         >>> result = thread.get()
 
         :param async_req: Whether to execute the request asynchronously.
@@ -126,7 +126,7 @@ class AdminApi(object):
             if _key not in _all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method db_admin_db_delete" % _key
+                    " to method drop_db" % _key
                 )
             _params[_key] = _val
         del _params['kwargs']

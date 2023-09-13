@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**root_get**](RootApi.md#root_get) | **GET** / | Get Root
+[**get_root**](RootApi.md#get_root) | **GET** / | Get Root
 
 
-# **root_get**
-> object root_get()
+# **get_root**
+> object get_root()
 
 Get Root
 
@@ -37,11 +37,11 @@ with chat_rpg_client.ApiClient(configuration) as api_client:
 
     try:
         # Get Root
-        api_response = api_instance.root_get()
-        print("The response of RootApi->root_get:\n")
+        api_response = api_instance.get_root()
+        print("The response of RootApi->get_root:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling RootApi->root_get: %s\n" % e)
+        print("Exception when calling RootApi->get_root: %s\n" % e)
 ```
 
 

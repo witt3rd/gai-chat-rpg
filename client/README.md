@@ -70,11 +70,11 @@ with chat_rpg_client.ApiClient(configuration) as api_client:
 
     try:
         # Delete Db
-        api_response = api_instance.db_admin_db_delete()
-        print("The response of AdminApi->db_admin_db_delete:\n")
+        api_response = api_instance.drop_db()
+        print("The response of AdminApi->drop_db:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling AdminApi->db_admin_db_delete: %s\n" % e)
+        print("Exception when calling AdminApi->drop_db: %s\n" % e)
 
 ```
 
@@ -84,15 +84,18 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AdminApi* | [**db_admin_db_delete**](docs/AdminApi.md#db_admin_db_delete) | **DELETE** /admin/db | Delete Db
-*RootApi* | [**root_get**](docs/RootApi.md#root_get) | **GET** / | Get Root
-*UsersApi* | [**user_users_post**](docs/UsersApi.md#user_users_post) | **POST** /users/ | Create User
-*UsersApi* | [**users_users_get**](docs/UsersApi.md#users_users_get) | **GET** /users/ | Get Users
+*AdminApi* | [**drop_db**](docs/AdminApi.md#drop_db) | **DELETE** /admin/db | Delete Db
+*RootApi* | [**get_root**](docs/RootApi.md#get_root) | **GET** / | Get Root
+*UsersApi* | [**create_user**](docs/UsersApi.md#create_user) | **POST** /users/ | Create User
+*UsersApi* | [**delete_user**](docs/UsersApi.md#delete_user) | **DELETE** /users/{id} | Delete User
+*UsersApi* | [**get_all_users**](docs/UsersApi.md#get_all_users) | **GET** /users/ | All Users
+*UsersApi* | [**update_user**](docs/UsersApi.md#update_user) | **PATCH** /users/{id} | Update User
 
 
 ## Documentation For Models
 
  - [HTTPValidationError](docs/HTTPValidationError.md)
+ - [UserIn](docs/UserIn.md)
  - [UserOut](docs/UserOut.md)
  - [UserSignup](docs/UserSignup.md)
  - [ValidationError](docs/ValidationError.md)

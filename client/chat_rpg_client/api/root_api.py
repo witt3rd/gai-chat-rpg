@@ -43,14 +43,14 @@ class RootApi(object):
         self.api_client = api_client
 
     @validate_arguments
-    def root_get(self, **kwargs) -> object:  # noqa: E501
+    def get_root(self, **kwargs) -> object:  # noqa: E501
         """Get Root  # noqa: E501
 
         Root endpoint for the API.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.root_get(async_req=True)
+        >>> thread = api.get_root(async_req=True)
         >>> result = thread.get()
 
         :param async_req: Whether to execute the request asynchronously.
@@ -66,18 +66,18 @@ class RootApi(object):
         """
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
-            raise ValueError("Error! Please call the root_get_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.root_get_with_http_info(**kwargs)  # noqa: E501
+            raise ValueError("Error! Please call the get_root_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
+        return self.get_root_with_http_info(**kwargs)  # noqa: E501
 
     @validate_arguments
-    def root_get_with_http_info(self, **kwargs) -> ApiResponse:  # noqa: E501
+    def get_root_with_http_info(self, **kwargs) -> ApiResponse:  # noqa: E501
         """Get Root  # noqa: E501
 
         Root endpoint for the API.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.root_get_with_http_info(async_req=True)
+        >>> thread = api.get_root_with_http_info(async_req=True)
         >>> result = thread.get()
 
         :param async_req: Whether to execute the request asynchronously.
@@ -126,7 +126,7 @@ class RootApi(object):
             if _key not in _all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method root_get" % _key
+                    " to method get_root" % _key
                 )
             _params[_key] = _val
         del _params['kwargs']

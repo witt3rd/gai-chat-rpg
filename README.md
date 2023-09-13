@@ -85,12 +85,33 @@ Create a copy of `.env.template` named `.env` and fill in the required values (e
 
 ### Dependencies
 
+#### Java
+
+##### Ubuntu (WSL2)
+
+This should install Java 11.
+
+```sh
+sudo apt update
+sudo apt install default-jre
+```
+
+#### Node
+
+Use [Node Version Manager](https://github.com/nvm-sh/nvm) to install Node.
+
+#### Python
+
 Create and activate a fresh Python virtual environment, then run:
 
 ```bash
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
+
+### Generating the Python API Client
+
+The latest client should always be generated and committed to the repository. However, if you need to generate a new client, ensure your server is running (see below) and run: `./gen_client.sh`.
 
 ### Running Locally
 
@@ -99,3 +120,7 @@ You can use the scripts to start each of the server (`./run_srv.sh`) and UI (`./
 ### Deployment
 
 @TODO
+
+```
+
+```
