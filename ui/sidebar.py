@@ -20,6 +20,22 @@ def show_sidebar() -> None:
     # State initialization
     #
 
+    def on_server_change() -> None:
+        if "client" in st.session_state:
+            del st.session_state.client
+        if "campaigns_api" in st.session_state:
+            del st.session_state.campaigns_api
+        if "campaigns" in st.session_state:
+            del st.session_state.campaigns
+        if "campaign" in st.session_state:
+            del st.session_state.campaign
+        if "users_api" in st.session_state:
+            del st.session_state.users_api
+        if "users" in st.session_state:
+            del st.session_state.users
+        if "messages_api" in st.session_state:
+            del st.session_state.messages_api
+
     if "server_url" not in st.session_state:
         st.session_state.server_url = get_config().server_url
 
@@ -55,9 +71,9 @@ def show_sidebar() -> None:
             st.session_state.campaigns = campaigns
             if len(campaigns) > 0:
                 st.session_state.campaign = campaigns[0]
-        except client.ApiException as e:
+        except client.ApiException as exc:
             st.exception(
-                f"Exception when calling CampaignsApi->get_all_campaigns: {e}\n"
+                f"Exception when calling CampaignsApi->get_all_campaigns: {exc}\n"
             )
 
     if "users_api" not in st.session_state:
@@ -73,8 +89,8 @@ def show_sidebar() -> None:
             users_api = st.session_state.users_api
             users = [client.User(**user) for user in users_api.get_all_users()]
             st.session_state.users = users
-        except client.ApiException as e:
-            st.exception("Exception when calling UsersApi->get_all_users: %s\n" % e)
+        except client.ApiException as exc:
+            st.exception(f"Exception when calling UsersApi->get_all_users: {exc}\n")
 
     if "messages_api" not in st.session_state:
         api_client = st.session_state.client
@@ -92,7 +108,10 @@ def show_sidebar() -> None:
         value=st.session_state.server_url,
     )
     if server_url:
-        st.session_state.server_url = server_url
+        if server_url != st.session_state.server_url:
+            st.session_state.server_url = server_url
+            on_server_change()
+        # st.experimental_rerun()
 
     server_socket = st.sidebar.text_input(
         label="Server Socket",
@@ -103,7 +122,7 @@ def show_sidebar() -> None:
 
     st.sidebar.selectbox(
         label="Select a user",
-        options=st.session_state.users,
+        options=st.session_state.users if "users" in st.session_state else [],
         index=0,
         key="user",
         format_func=lambda user: user.username,
