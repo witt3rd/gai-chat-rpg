@@ -1,9 +1,10 @@
 """
-This module contains the FastAPI application instance and its routes.
+This module contains the FastAPI application and the websocket server
 """
 # # System # #
 import asyncio
 import os
+from typing import NoReturn
 
 # # Packages # #
 from loguru import logger
@@ -24,21 +25,13 @@ from server.routes import (
 
 ###
 
-#
-# Websockets
-#
-
-
-# create handler for each connection
-async def handler(websocket, path) -> None:
-    data = await websocket.recv()
-    reply = f"Data recieved as:  {data}!"
-    await websocket.send(reply)
-
 
 # Setup FastAPI
 
 app = FastAPI()
+
+# Routes
+
 app.include_router(
     admin_routes.router,
     tags=["Admin"],
@@ -59,6 +52,35 @@ app.include_router(
     tags=["Users"],
     prefix="/users",
 )
+
+# App state
+
+app.state.sockets = set()
+
+###
+
+#
+# Websockets
+#
+import datetime
+import random
+
+
+async def register_socket(websocket) -> None:
+    logger.info(f"Registering socket: {websocket}")
+    app.state.sockets.add(websocket)
+    try:
+        await websocket.wait_closed()
+    finally:
+        app.state.sockets.remove(websocket)
+
+
+async def show_time() -> NoReturn:
+    while True:
+        message = datetime.datetime.utcnow().isoformat() + "Z"
+        websockets.broadcast(app.state.sockets, message)
+        await asyncio.sleep(random.random() * 2 + 1)
+
 
 ###
 
@@ -98,27 +120,33 @@ async def get_root() -> str:
 #
 # Main
 #
-
-
-async def my_coroutine():
-    # Run another async operation
-    await asyncio.sleep(2)
-    print("Coroutine finished")
+async def socket_server() -> None:
+    """
+    Runs the websockets server.
+    """
+    logger.info(
+        "Starting websockets server: ws://{host}:{port}",
+        host=get_config().socket_host,
+        port=get_config().socket_port,
+    )
+    async with websockets.serve(
+        register_socket,
+        get_config().socket_host,
+        get_config().socket_port,
+    ):
+        await show_time()
 
 
 if __name__ == "__main__":
-    # Start the event loop
-    start_server = websockets.serve(handler, "localhost", 9000)
-
+    # Get the event loop and run the websockets server and FastAPI application
     loop = asyncio.get_event_loop()
 
-    loop.run_until_complete(start_server)
-    # loop.run_forever()
+    # Run the websockets server
+    socket_server_task = loop.create_task(
+        coro=socket_server(),
+    )
 
-    # Create a task for the coroutine
-    task = loop.create_task(my_coroutine())
-
-    # Start the FastAPI application
+    # Configure the FastAPI application
     watch_dir = os.path.dirname(__file__)
     config = Config(
         app="server.app:app",
@@ -128,11 +156,19 @@ if __name__ == "__main__":
         reload_dirs=[str(watch_dir)],
     )
 
-    # Run the event loop until the task is complete
-    loop.run_until_complete(task)
-
     # Run the FastAPI application
     server = Server(config)
     loop.run_until_complete(server.serve())
+
+    # Cancel the websockets server
+    socket_server_task.cancel()
+    try:
+        loop.run_until_complete(socket_server_task)
+    except asyncio.CancelledError:
+        pass
+
+    # Shutdown the FastAPI application
     loop.run_until_complete(server.shutdown())
+
+    # Close the event loop
     loop.close()

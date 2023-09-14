@@ -26,19 +26,20 @@ load_dotenv()
 
 
 @dataclass
-class Settings:
+class Config:
     """
     A dataclass for managing configuration settings.
     """
 
     server_url: str
+    server_socket: str
     cookie_name: str
     cookie_key: str
     cookie_expiry_days: int
 
 
 @lru_cache()
-def get_config() -> Settings:
+def get_config() -> Config:
     """
     Returns an instance of the `Settings` dataclass with values populated
     from environment variables or default values.
@@ -53,8 +54,9 @@ def get_config() -> Settings:
         >>> print(config.OPENAI_API_KEY)
         'my_secret_api_key'
     """
-    return Settings(
+    return Config(
         server_url=os.getenv("SERVER_URL", "http://localhost:8080"),
+        server_socket=os.getenv("SERVER_SOCKET", "ws://localhost:8081"),
         cookie_name=os.getenv("COOKIE_NAME", "chatrpg"),
         cookie_key=os.getenv("COOKIE_KEY", "chatrpg"),
         cookie_expiry_days=os.getenv("COOKIE_EXPIRY_DAYS", 0),

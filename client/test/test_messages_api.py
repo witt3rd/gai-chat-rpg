@@ -35,8 +35,8 @@ class TestMessagesApi(unittest.TestCase):
         """
         pass
 
-    def test_get_campaign_messages(self):
-        """Test case for get_campaign_messages
+    def test_get_messages(self):
+        """Test case for get_messages
 
         Get Campaign Messages  # noqa: E501
         """

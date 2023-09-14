@@ -186,18 +186,20 @@ class MessagesApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def get_campaign_messages(self, campaign : Any, skip : Optional[Any] = None, limit : Optional[Any] = None, **kwargs) -> object:  # noqa: E501
+    def get_messages(self, campaign : Optional[Any] = None, since : Optional[Any] = None, skip : Optional[Any] = None, limit : Optional[Any] = None, **kwargs) -> object:  # noqa: E501
         """Get Campaign Messages  # noqa: E501
 
-        Get all messages for a campaign  # noqa: E501
+        Get all messages for a campaign (optional) since a given time (optional)  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_campaign_messages(campaign, skip, limit, async_req=True)
+        >>> thread = api.get_messages(campaign, since, skip, limit, async_req=True)
         >>> result = thread.get()
 
-        :param campaign: (required)
+        :param campaign:
         :type campaign: object
+        :param since:
+        :type since: object
         :param skip:
         :type skip: object
         :param limit:
@@ -215,22 +217,24 @@ class MessagesApi(object):
         """
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
-            raise ValueError("Error! Please call the get_campaign_messages_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.get_campaign_messages_with_http_info(campaign, skip, limit, **kwargs)  # noqa: E501
+            raise ValueError("Error! Please call the get_messages_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
+        return self.get_messages_with_http_info(campaign, since, skip, limit, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def get_campaign_messages_with_http_info(self, campaign : Any, skip : Optional[Any] = None, limit : Optional[Any] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def get_messages_with_http_info(self, campaign : Optional[Any] = None, since : Optional[Any] = None, skip : Optional[Any] = None, limit : Optional[Any] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Get Campaign Messages  # noqa: E501
 
-        Get all messages for a campaign  # noqa: E501
+        Get all messages for a campaign (optional) since a given time (optional)  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_campaign_messages_with_http_info(campaign, skip, limit, async_req=True)
+        >>> thread = api.get_messages_with_http_info(campaign, since, skip, limit, async_req=True)
         >>> result = thread.get()
 
-        :param campaign: (required)
+        :param campaign:
         :type campaign: object
+        :param since:
+        :type since: object
         :param skip:
         :type skip: object
         :param limit:
@@ -264,6 +268,7 @@ class MessagesApi(object):
 
         _all_params = [
             'campaign',
+            'since',
             'skip',
             'limit'
         ]
@@ -284,7 +289,7 @@ class MessagesApi(object):
             if _key not in _all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method get_campaign_messages" % _key
+                    " to method get_messages" % _key
                 )
             _params[_key] = _val
         del _params['kwargs']
@@ -293,12 +298,15 @@ class MessagesApi(object):
 
         # process the path parameters
         _path_params = {}
-        if _params['campaign']:
-            _path_params['campaign'] = _params['campaign']
-
 
         # process the query parameters
         _query_params = []
+        if _params.get('campaign') is not None:  # noqa: E501
+            _query_params.append(('campaign', _params['campaign']))
+
+        if _params.get('since') is not None:  # noqa: E501
+            _query_params.append(('since', _params['since']))
+
         if _params.get('skip') is not None:  # noqa: E501
             _query_params.append(('skip', _params['skip']))
 
@@ -325,7 +333,7 @@ class MessagesApi(object):
         }
 
         return self.api_client.call_api(
-            '/messages/{campaign}', 'GET',
+            '/messages/', 'GET',
             _path_params,
             _query_params,
             _header_params,
@@ -342,18 +350,16 @@ class MessagesApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def send_message(self, campaign : Any, message_create : MessageCreate, **kwargs) -> Message:  # noqa: E501
+    def send_message(self, message_create : MessageCreate, **kwargs) -> Message:  # noqa: E501
         """Send Message  # noqa: E501
 
         Create a new message.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.send_message(campaign, message_create, async_req=True)
+        >>> thread = api.send_message(message_create, async_req=True)
         >>> result = thread.get()
 
-        :param campaign: (required)
-        :type campaign: object
         :param message_create: (required)
         :type message_create: MessageCreate
         :param async_req: Whether to execute the request asynchronously.
@@ -370,21 +376,19 @@ class MessagesApi(object):
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
             raise ValueError("Error! Please call the send_message_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.send_message_with_http_info(campaign, message_create, **kwargs)  # noqa: E501
+        return self.send_message_with_http_info(message_create, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def send_message_with_http_info(self, campaign : Any, message_create : MessageCreate, **kwargs) -> ApiResponse:  # noqa: E501
+    def send_message_with_http_info(self, message_create : MessageCreate, **kwargs) -> ApiResponse:  # noqa: E501
         """Send Message  # noqa: E501
 
         Create a new message.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.send_message_with_http_info(campaign, message_create, async_req=True)
+        >>> thread = api.send_message_with_http_info(message_create, async_req=True)
         >>> result = thread.get()
 
-        :param campaign: (required)
-        :type campaign: object
         :param message_create: (required)
         :type message_create: MessageCreate
         :param async_req: Whether to execute the request asynchronously.
@@ -415,7 +419,6 @@ class MessagesApi(object):
         _params = locals()
 
         _all_params = [
-            'campaign',
             'message_create'
         ]
         _all_params.extend(
@@ -444,9 +447,6 @@ class MessagesApi(object):
 
         # process the path parameters
         _path_params = {}
-        if _params['campaign']:
-            _path_params['campaign'] = _params['campaign']
-
 
         # process the query parameters
         _query_params = []
@@ -480,7 +480,7 @@ class MessagesApi(object):
         }
 
         return self.api_client.call_api(
-            '/messages/{campaign}', 'POST',
+            '/messages/', 'POST',
             _path_params,
             _query_params,
             _header_params,

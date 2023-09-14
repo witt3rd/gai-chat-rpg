@@ -8,6 +8,7 @@ import chat_rpg_client as client
 import streamlit as st
 
 # # # Project # # #
+from ui.sidebar import show_sidebar
 from ui.util.config import get_config
 
 #
@@ -18,7 +19,7 @@ st.set_page_config(
     # layout="wide",
     initial_sidebar_state="expanded",
 )
-
+show_sidebar()
 
 #
 # Callbacks (_before_ the state is managed, so we can make changes)

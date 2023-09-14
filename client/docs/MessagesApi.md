@@ -5,8 +5,8 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**delete_message**](MessagesApi.md#delete_message) | **DELETE** /messages/{id} | Delete Message
-[**get_campaign_messages**](MessagesApi.md#get_campaign_messages) | **GET** /messages/{campaign} | Get Campaign Messages
-[**send_message**](MessagesApi.md#send_message) | **POST** /messages/{campaign} | Send Message
+[**get_messages**](MessagesApi.md#get_messages) | **GET** /messages/ | Get Campaign Messages
+[**send_message**](MessagesApi.md#send_message) | **POST** /messages/ | Send Message
 [**update_message**](MessagesApi.md#update_message) | **PATCH** /messages/{id} | Update Message
 
 
@@ -78,12 +78,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get_campaign_messages**
-> object get_campaign_messages(campaign, skip=skip, limit=limit)
+# **get_messages**
+> object get_messages(campaign=campaign, since=since, skip=skip, limit=limit)
 
 Get Campaign Messages
 
-Get all messages for a campaign
+Get all messages for a campaign (optional) since a given time (optional)
 
 ### Example
 
@@ -105,17 +105,18 @@ configuration = chat_rpg_client.Configuration(
 with chat_rpg_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = chat_rpg_client.MessagesApi(api_client)
-    campaign = 5eb7cf5a86d9755df3a6c593 # object | 
+    campaign = 5eb7cf5a86d9755df3a6c593 # object |  (optional)
+    since = None # object |  (optional)
     skip = None # object |  (optional)
     limit = None # object |  (optional)
 
     try:
         # Get Campaign Messages
-        api_response = api_instance.get_campaign_messages(campaign, skip=skip, limit=limit)
-        print("The response of MessagesApi->get_campaign_messages:\n")
+        api_response = api_instance.get_messages(campaign=campaign, since=since, skip=skip, limit=limit)
+        print("The response of MessagesApi->get_messages:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling MessagesApi->get_campaign_messages: %s\n" % e)
+        print("Exception when calling MessagesApi->get_messages: %s\n" % e)
 ```
 
 
@@ -124,7 +125,8 @@ with chat_rpg_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **campaign** | [**object**](.md)|  | 
+ **campaign** | [**object**](.md)|  | [optional] 
+ **since** | [**object**](.md)|  | [optional] 
  **skip** | [**object**](.md)|  | [optional] 
  **limit** | [**object**](.md)|  | [optional] 
 
@@ -150,7 +152,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **send_message**
-> Message send_message(campaign, message_create)
+> Message send_message(message_create)
 
 Send Message
 
@@ -178,12 +180,11 @@ configuration = chat_rpg_client.Configuration(
 with chat_rpg_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = chat_rpg_client.MessagesApi(api_client)
-    campaign = None # object | 
     message_create = chat_rpg_client.MessageCreate() # MessageCreate | 
 
     try:
         # Send Message
-        api_response = api_instance.send_message(campaign, message_create)
+        api_response = api_instance.send_message(message_create)
         print("The response of MessagesApi->send_message:\n")
         pprint(api_response)
     except Exception as e:
@@ -196,7 +197,6 @@ with chat_rpg_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **campaign** | [**object**](.md)|  | 
  **message_create** | [**MessageCreate**](MessageCreate.md)|  | 
 
 ### Return type

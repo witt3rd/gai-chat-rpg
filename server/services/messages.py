@@ -2,6 +2,7 @@
 User services
 """
 # # System # #
+import datetime
 
 # # Packages # #
 from beanie import PydanticObjectId
@@ -19,7 +20,6 @@ from server.models import (
 
 
 async def create_message(
-    campaign: PydanticObjectId,
     message_create: message_models.MessageCreate,
 ) -> message_models.MessageDoc:
     """
@@ -30,9 +30,9 @@ async def create_message(
     # message to ensure referential integrity.
 
     # Ensure the campaign exists
-    campaign_doc = await campaign_models.CampaignDoc.get(campaign)
+    campaign_doc = await campaign_models.CampaignDoc.get(message_create.campaign)
     if campaign_doc is None:
-        raise ValueError(f"Campaign with id {campaign} does not exist")
+        raise ValueError(f"Campaign with id {message_create.campaign} does not exist")
 
     # Ensure the sender exists
     sender_doc = await user_models.UserDoc.get(message_create.sender)
@@ -47,7 +47,7 @@ async def create_message(
 
     # Create the message
     message_doc = await message_models.MessageDoc.create(
-        campaign=campaign,
+        campaign=message_create.campaign,
         sender=message_create.sender,
         target=message_create.target,
         content=message_create.content,
@@ -56,21 +56,33 @@ async def create_message(
     return message_doc
 
 
-async def get_campaign_messages(
-    campaign: PydanticObjectId,
+async def get_messages(
+    campaign: PydanticObjectId | None = None,
+    since: datetime.datetime | None = None,
     skip: int = 0,
     limit: int = 100,
 ) -> list[message_models.MessageDoc]:
     """
     Get all messages for a campaign
     """
+    # Start with a base query
+    query = {}
+
+    # Add campaign to the query if it's provided
+    if campaign is not None:
+        query["campaign"] = campaign
+
+    # Add since to the query if it's provided
+    if since is not None:
+        query["timestamp"] = {"$gt": since}
+
     messages = await message_models.MessageDoc.find(
-        message_models.MessageDoc.campaign == campaign,
+        query,
         sort=[("timestamp", 1)],
         skip=skip,
         limit=limit,
     ).to_list()
-    logger.info(f"Got {len(messages)} messages for campaign {campaign}")
+    logger.info(f"Got {len(messages)} messages for campaign {campaign} since {since}")
     return messages
 
 

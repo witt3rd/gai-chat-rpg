@@ -26,7 +26,7 @@ load_dotenv()
 
 
 @dataclass
-class Settings:
+class Config:
     """
     A dataclass for managing configuration settings.
     """
@@ -37,10 +37,12 @@ class Settings:
     mongodb_db: str
     host: str
     port: int
+    socket_host: str
+    socket_port: int
 
 
 @lru_cache()
-def get_config() -> Settings:
+def get_config() -> Config:
     """
     Returns an instance of the `Settings` dataclass with values populated
     from environment variables or default values.
@@ -55,11 +57,13 @@ def get_config() -> Settings:
         >>> print(config.OPENAI_API_KEY)
         'my_secret_api_key'
     """
-    return Settings(
+    return Config(
         openai_api_key=os.getenv("OPENAI_API_KEY"),
         prompts_dir=os.getenv("PROMPTS_DIR", "./prompts"),
         mongodb_url=os.getenv("MONGODB_URL", "mongodb://localhost:27017/"),
         mongodb_db=os.getenv("MONGODB_DB", "chat-rpg"),
-        host=os.getenv("HOST", "0.0.0.0"),
+        host=os.getenv("HOST", "localhost"),
         port=int(os.getenv("PORT", "8080")),
+        socket_host=os.getenv("SOCKET_HOST", "localhost"),
+        socket_port=int(os.getenv("SOCKET_PORT", "8081")),
     )

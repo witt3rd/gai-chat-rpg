@@ -2,17 +2,24 @@
 Game page
 """
 # # # System # # #
-import os
 import asyncio
+import os
+from typing import NoReturn
 
 # # # Packages # # #
 import chat_rpg_client as client
 from PIL import Image
 import streamlit as st
 from streamlit.elements.image import AtomicImage
-import websockets
+
+# import asyncio
+# import threading
+# from streamlit.runtime.scriptrunner import add_script_run_ctx
+# import websockets
+# import aiohttp
 
 # # # Project # # #
+from ui.sidebar import show_sidebar
 
 #
 
@@ -22,21 +29,73 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+show_sidebar()
 
 #
 # Websockets
 #
 
 
-async def test():
-    async with websockets.connect("ws://localhost:9000") as websocket:
-        await websocket.send("hello")
-        response = await websocket.recv()
-        print(response)
+# st.markdown(
+#     """
+#     <style>
+#     .time {
+#         font-size: 130px !important;
+#         font-weight: 700 !important;
+#         color: #ec5953 !important;
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True,
+# )
 
 
-asyncio.run(test())
-# asyncio.get_event_loop().run_until_complete(test())
+# status = st.empty()
+
+# if "socket_task" not in st.session_state:
+
+#     async def socket_task(
+#         server_socket,
+#         status,
+#     ) -> None:
+#         # async with websockets.connect(
+#         #     server_socket,
+#         # ) as websocket:
+#         #     status.success(f"Connected to socket: {server_socket}")
+#         #     while True:
+#         #         response = await websocket.recv()
+#         #         status.write(response)
+#         async with aiohttp.ClientSession(trust_env=True) as session:
+#             status.subheader("Connecting...")
+#             async with session.ws_connect(server_socket) as ws:
+#                 status.subheader("Connected!")
+#                 while True:
+#                     response = await ws.receive()
+#                     status.subheader(response.data)
+
+#     def start_async_loop(
+#         server_socket,
+#         status,
+#     ):
+#         status.subheader("Connecting...")
+#         loop = asyncio.new_event_loop()
+#         asyncio.set_event_loop(loop)
+#         loop.run_until_complete(
+#             socket_task(
+#                 server_socket,
+#                 status,
+#             )
+#         )
+#         loop.close()
+
+#     thread = threading.Thread(
+#         target=start_async_loop,
+#         args=(st.session_state.server_socket, status),
+#     )
+#     add_script_run_ctx(thread)
+#     thread.start()
+#     st.session_state.socket_task = thread
+
 
 #
 # Helpers
@@ -100,71 +159,10 @@ def send_message(
         content=content,
     )
     messages_api.send_message(
-        campaign=st.session_state.campaign.id,
         message_create=message_create,
     )
 
     del st.session_state.messages
-
-
-#
-# State initialization
-#
-
-if "client" not in st.session_state:
-    configuration = client.Configuration(
-        host=st.session_state.server_url,
-    )
-    api_client = client.ApiClient(
-        configuration=configuration,
-        header_name="User-Agent",
-        header_value="chat-rpg-client",
-    )
-    st.session_state.client = api_client
-
-if "campaigns_api" not in st.session_state:
-    api_client = st.session_state.client
-    campaigns_api = client.CampaignsApi(
-        api_client=api_client,
-    )
-    st.session_state.campaigns_api = campaigns_api
-
-if "campaigns" not in st.session_state:
-    try:
-        # Get Campaigns
-        campaigns_api = st.session_state.campaigns_api
-        campaigns = [
-            client.Campaign(**campaign)
-            for campaign in campaigns_api.get_all_campaigns()
-        ]
-        st.session_state.campaigns = campaigns
-        if len(campaigns) > 0:
-            st.session_state.campaign = campaigns[0]
-    except client.ApiException as e:
-        st.exception(f"Exception when calling CampaignsApi->get_all_campaigns: {e}\n")
-
-if "users_api" not in st.session_state:
-    api_client = st.session_state.client
-    users_api = client.UsersApi(
-        api_client=api_client,
-    )
-    st.session_state.users_api = users_api
-
-if "users" not in st.session_state:
-    try:
-        # Get Users
-        users_api = st.session_state.users_api
-        users = [client.User(**user) for user in users_api.get_all_users()]
-        st.session_state.users = users
-    except client.ApiException as e:
-        st.exception("Exception when calling UsersApi->get_all_users: %s\n" % e)
-
-if "messages_api" not in st.session_state:
-    api_client = st.session_state.client
-    messages_api = client.MessagesApi(
-        api_client=api_client,
-    )
-    st.session_state.messages_api = messages_api
 
 
 #
@@ -184,57 +182,68 @@ st.selectbox(
     format_func=lambda campaign: campaign.name,
 )
 
-st.selectbox(
-    label="Select a user",
-    options=st.session_state.users,
-    index=0,
-    key="user",
-    format_func=lambda user: user.username,
-)
-
-
-if "messages" not in st.session_state and "campaign" in st.session_state:
-    try:
-        messages_api = st.session_state.messages_api
-        messages = [
-            client.Message(**message)
-            for message in messages_api.get_campaign_messages(
-                campaign=st.session_state.campaign.id,
-            )
-        ]
-        st.session_state.messages = messages
-    except client.ApiException as e:
-        st.exception(
-            f"Exception when calling MessagesApi->get_campaign_messages: {e}\n"
-        )
 
 name = st.session_state.user.username if st.session_state.user else None
 campaign_name = st.session_state.campaign.name if st.session_state.campaign else None
 if name and campaign_name:
     st.write(f"Greetings {name}!")
     st.write(f"You are currently playing in the {campaign_name} campaign.")
-    if "messages" in st.session_state:
-        st.write(
-            f"There are {len(st.session_state.messages)} messages in the campaign."
-        )
 else:
     st.write("Please select a user and campaign")
     st.stop()
 
 
-if "messages" in st.session_state:
-    for message in st.session_state.messages:
-        sender = _get_user_name(message.sender)
-        with st.chat_message(
-            name=sender,
-            avatar=_get_user_avatar(message.sender),
-        ):
-            target = _get_user_name(message.target)
-            st.write(f"**{sender}** says to **{target}**:")
-            st.write(message.content)
+async def watch() -> NoReturn:
+    while True:
+        if "campaign" in st.session_state:
+            since = None
+            if "messages" not in st.session_state:
+                st.session_state.messages = []
+            else:
+                last_message = st.session_state.messages[-1]
+                since = last_message.timestamp
+            try:
+                messages_api = st.session_state.messages_api
+                messages = [
+                    client.Message(**message)
+                    for message in messages_api.get_messages(
+                        campaign=st.session_state.campaign.id,
+                        since=since,
+                    )
+                ]
+                if len(messages) > 0:
+                    st.session_state.messages.extend(messages)
+            except client.ApiException as e:
+                st.exception(
+                    f"Exception when calling MessagesApi->get_campaign_messages: {e}\n"
+                )
+
+            for message in st.session_state.messages:
+                if not since or message.timestamp > since:
+                    sender = _get_user_name(message.sender)
+                    with st.chat_message(
+                        name=sender,
+                        avatar=_get_user_avatar(message.sender),
+                    ):
+                        target = _get_user_name(message.target)
+                        st.write(f"**{sender}** says to **{target}**:")
+                        st.write(message.content)
+
+        # test.markdown(
+        #     f"""
+        #     <p class="time">
+        #         {str(datetime.now())}
+        #     </p>
+        #     """,
+        #     unsafe_allow_html=True,
+        # )
+        r = await asyncio.sleep(1)
 
 
 prompt = st.chat_input("Say something")
 if prompt:
     send_message(prompt)
-    st.experimental_rerun()
+    # st.experimental_rerun()
+
+
+asyncio.run(watch())

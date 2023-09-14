@@ -2,11 +2,12 @@
 Mesaging routes
 """
 # # System # #
+import datetime
 
 # # Packages # #
 from beanie import PydanticObjectId
 from bson.errors import InvalidId
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Body, HTTPException, status
 
 # # Project # #
 from server.models import (
@@ -22,43 +23,43 @@ router = APIRouter()
 
 
 @router.post(
-    "/{campaign}",
+    "/",
     response_model=message_models.Message,
     status_code=status.HTTP_201_CREATED,
     description="Create a new message.",
     operation_id="send_message",
 )
 async def send_message(
-    campaign: str,
-    message: message_models.MessageCreate,
+    message: message_models.MessageCreate = Body(...),
 ) -> message_models.Message:
     """
     Create a new message
     """
     message_doc = await message_services.create_message(
-        campaign,
         message,
     )
     return message_models.Message(**message_doc.dict())
 
 
 @router.get(
-    "/{campaign}",
+    "/",
     response_model=list[message_models.Message],
     status_code=status.HTTP_200_OK,
-    description="Get all messages for a campaign",
-    operation_id="get_campaign_messages",
+    description="Get all messages for a campaign (optional) since a given time (optional)",
+    operation_id="get_messages",
 )
 async def get_campaign_messages(
-    campaign: PydanticObjectId,
+    campaign: PydanticObjectId | None = None,
+    since: datetime.datetime | None = None,
     skip: int = 0,
     limit: int = 100,
 ) -> list[message_models.Message]:
     """
     Get all messages for a campaign
     """
-    messages = await message_services.get_campaign_messages(
+    messages = await message_services.get_messages(
         campaign=campaign,
+        since=since,
         skip=skip,
         limit=limit,
     )
