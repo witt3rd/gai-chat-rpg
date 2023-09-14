@@ -4,6 +4,7 @@ Game page
 # # # System # # #
 import asyncio
 import os
+import random
 from typing import NoReturn
 
 # # # Packages # # #
@@ -151,12 +152,53 @@ def send_message(
     """
     Send a message to the campaign
     """
+    sender = st.session_state.user.id
+    target = None
+    is_private = False
+
+    if content.startswith("/"):
+        first_space = content.find(" ")
+        if first_space == -1:
+            first_space = len(content)
+        details = content[first_space:].strip()
+
+        command = content[1:first_space]
+        if command == "roll":
+            if details:
+                roll = details.split("d")
+                if len(roll) == 2:
+                    num_dice = int(roll[0])
+                    num_sides = int(roll[1])
+                    rolls = [random.randint(1, num_sides) for _ in range(num_dice)]
+                    content = f"Rolling {num_dice}d{num_sides}: {rolls}"
+                else:
+                    content = "Invalid roll"
+            else:
+                content = "Please specify a roll, e.g., :red[2]:green[d]:orange[20]"
+            target = sender
+            is_private = True
+        elif command == "dm":
+            if details:
+                target = details
+                content = f"Sending a message to {target}"
+            else:
+                content = "Please specify a user to send a message to"
+            is_private = True
+        elif command == "help":
+            content = """
+            **/roll** - Roll some dice, e.g., `/roll 2d20`\n
+            **/dm** - Send a private message to a user, e.g., `/dm @user`
+            """
+            target = sender
+            is_private = True
+
     messages_api = st.session_state.messages_api
     message_create = client.MessageCreate(
         campaign=st.session_state.campaign.id,
-        sender=st.session_state.user.id,
-        # target=st.session_state.user.id,
+        sender=sender,
+        target=target,
         content=content,
+        is_private=is_private,
     )
     messages_api.send_message(
         message_create=message_create,
