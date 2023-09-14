@@ -9,7 +9,6 @@ import streamlit as st
 
 # # # Project # # #
 from ui.sidebar import show_sidebar
-from ui.util.config import get_config
 
 #
 

@@ -6,12 +6,10 @@ import time
 import numpy as np
 
 # # # Packages # # #
-import chat_rpg_client as client
 import streamlit as st
 
 # # # Project # # #
 from ui.sidebar import show_sidebar
-from ui.util.config import get_config
 
 #
 

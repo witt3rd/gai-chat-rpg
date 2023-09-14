@@ -240,10 +240,9 @@ async def watch() -> NoReturn:
         r = await asyncio.sleep(1)
 
 
-prompt = st.chat_input("Say something")
+prompt = st.chat_input("Speak")
 if prompt:
     send_message(prompt)
-    # st.experimental_rerun()
 
 
 asyncio.run(watch())
