@@ -9,7 +9,6 @@ Name | Type | Description | Notes
 **sender** | **object** |  | [optional] 
 **target** | **object** |  | [optional] 
 **content** | **object** |  | [optional] 
-**is_private** | **object** |  | [optional] 
 
 ## Example
 

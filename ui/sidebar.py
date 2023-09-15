@@ -15,125 +15,119 @@ from ui.config import get_config
 ###
 
 
-def show_sidebar() -> None:
+def _reset_state() -> None:
     #
     # State initialization
     #
 
-    def on_server_change() -> None:
-        if "client" in st.session_state:
-            del st.session_state.client
-        if "campaigns_api" in st.session_state:
-            del st.session_state.campaigns_api
-        if "campaigns" in st.session_state:
-            del st.session_state.campaigns
-        if "campaign" in st.session_state:
-            del st.session_state.campaign
-        if "users_api" in st.session_state:
-            del st.session_state.users_api
-        if "users" in st.session_state:
-            del st.session_state.users
-        if "messages_api" in st.session_state:
-            del st.session_state.messages_api
+    configuration = client.Configuration(
+        host=st.session_state.server_url,
+    )
+    api_client = client.ApiClient(
+        configuration=configuration,
+        header_name="User-Agent",
+        header_value="chat-rpg-client",
+    )
+    st.session_state.client = api_client
 
-    if "server_url" not in st.session_state:
-        st.session_state.server_url = get_config().server_url
+    api_client = st.session_state.client
+    campaigns_api = client.CampaignsApi(
+        api_client=api_client,
+    )
+    st.session_state.campaigns_api = campaigns_api
 
-    if "server_socket" not in st.session_state:
-        st.session_state.server_socket = get_config().server_socket
+    try:
+        # Get Campaigns
+        campaigns_api = st.session_state.campaigns_api
+        campaigns = [
+            client.Campaign(**campaign)
+            for campaign in campaigns_api.get_all_campaigns()
+        ]
+        st.session_state.campaigns = campaigns
+        if len(campaigns) > 0:
+            st.session_state.campaign = campaigns[0]
+    except client.ApiException as exc:
+        st.exception(f"Exception when calling CampaignsApi->get_all_campaigns: {exc}\n")
 
-    if "client" not in st.session_state:
-        configuration = client.Configuration(
-            host=st.session_state.server_url,
-        )
-        api_client = client.ApiClient(
-            configuration=configuration,
-            header_name="User-Agent",
-            header_value="chat-rpg-client",
-        )
-        st.session_state.client = api_client
+    api_client = st.session_state.client
+    users_api = client.UsersApi(
+        api_client=api_client,
+    )
+    st.session_state.users_api = users_api
 
-    if "campaigns_api" not in st.session_state:
-        api_client = st.session_state.client
-        campaigns_api = client.CampaignsApi(
-            api_client=api_client,
-        )
-        st.session_state.campaigns_api = campaigns_api
+    try:
+        # Get Users
+        users_api = st.session_state.users_api
+        users = [client.User(**user) for user in users_api.get_all_users()]
+        st.session_state.users = users
+    except client.ApiException as exc:
+        st.exception(f"Exception when calling UsersApi->get_all_users: {exc}\n")
 
-    if "campaigns" not in st.session_state:
-        try:
-            # Get Campaigns
-            campaigns_api = st.session_state.campaigns_api
-            campaigns = [
-                client.Campaign(**campaign)
-                for campaign in campaigns_api.get_all_campaigns()
-            ]
-            st.session_state.campaigns = campaigns
-            if len(campaigns) > 0:
-                st.session_state.campaign = campaigns[0]
-        except client.ApiException as exc:
-            st.exception(
-                f"Exception when calling CampaignsApi->get_all_campaigns: {exc}\n"
-            )
+    api_client = st.session_state.client
+    messages_api = client.MessagesApi(
+        api_client=api_client,
+    )
+    st.session_state.messages_api = messages_api
 
-    if "users_api" not in st.session_state:
-        api_client = st.session_state.client
-        users_api = client.UsersApi(
-            api_client=api_client,
-        )
-        st.session_state.users_api = users_api
+    if "messages" in st.session_state:
+        del st.session_state.messages
 
-    if "users" not in st.session_state:
-        try:
-            # Get Users
-            users_api = st.session_state.users_api
-            users = [client.User(**user) for user in users_api.get_all_users()]
-            st.session_state.users = users
-        except client.ApiException as exc:
-            st.exception(f"Exception when calling UsersApi->get_all_users: {exc}\n")
 
-    if "messages_api" not in st.session_state:
-        api_client = st.session_state.client
-        messages_api = client.MessagesApi(
-            api_client=api_client,
-        )
-        st.session_state.messages_api = messages_api
-
+def show_sidebar() -> None:
     #
     # UI
     #
 
     server_url = st.sidebar.text_input(
         label="Server URL",
-        value=st.session_state.server_url,
+        value=st.session_state.server_url
+        if "server_url" in st.session_state
+        else get_config().server_url,
     )
     if server_url:
-        if server_url != st.session_state.server_url:
+        if (
+            "server_url" not in st.session_state
+            or server_url != st.session_state.server_url
+        ):
+            print(f"Server URL changed to {server_url}")
             st.session_state.server_url = server_url
-            on_server_change()
-        # st.experimental_rerun()
+            _reset_state()
 
-    server_socket = st.sidebar.text_input(
-        label="Server Socket",
-        value=st.session_state.server_socket,
-    )
-    if server_socket:
-        st.session_state.server_socket = server_socket
+    # server_socket = st.sidebar.text_input(
+    #     label="Server Socket",
+    #     value=st.session_state.server_socket,
+    # )
+    # if server_socket:
+    #     st.session_state.server_socket = server_socket
 
-    st.sidebar.selectbox(
+    # System users are not selectable
+    candidate_users = st.session_state.users if "users" in st.session_state else []
+    user_options = [user for user in candidate_users if not user.is_system]
+    index = 0
+    if "user" in st.session_state:
+        for i, user in enumerate(user_options):
+            if user.username == st.session_state.user.username:
+                index = i
+                break
+
+    user = st.sidebar.selectbox(
         label="Select a user",
-        options=st.session_state.users if "users" in st.session_state else [],
-        index=0,
-        key="user",
+        options=user_options,
+        index=index,
         format_func=lambda user: user.username,
     )
+    if user:
+        if "user" not in st.session_state or user != st.session_state.user:
+            print(f"User changed to {user.username}")
+            st.session_state.user = user
+            _reset_state()
 
     st.sidebar.button(
         "Logout",
         disabled=True,
     )
 
-    if not st.session_state.user:
+    if "user" not in st.session_state:
         st.stop()
 
 

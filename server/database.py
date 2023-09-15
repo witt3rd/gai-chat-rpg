@@ -51,6 +51,32 @@ async def init_db() -> None:
         ],
     )
 
+    # check for the existence of the "System" user
+    gpt4_user = await user_models.UserDoc.find_one({"username": "System"})
+    if gpt4_user is None:
+        gpt4_user = user_models.UserDoc(
+            username="System",
+            name="System",
+            email="system@chat-rpg.com",
+            password="password",
+            avatar="hal.png",
+            is_system=True,
+        )
+        await gpt4_user.insert()
+
+    # check for the existence of the "GPT4" user
+    gpt4_user = await user_models.UserDoc.find_one({"username": "GPT4"})
+    if gpt4_user is None:
+        gpt4_user = user_models.UserDoc(
+            username="GPT4",
+            name="OpenAI GPT-4",
+            email="gpt4@openai.com",
+            password="password",
+            avatar="openai.png",
+            is_system=True,
+        )
+        await gpt4_user.insert()
+
 
 async def drop_db() -> None:
     """

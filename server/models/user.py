@@ -33,6 +33,7 @@ class UserDoc(Document):
     password: str = Field(..., min_length=6)
     avatar: str | None = None
     is_admin: bool = Field(False)
+    is_system: bool = Field(False)
 
     @classmethod
     async def create(
@@ -43,6 +44,7 @@ class UserDoc(Document):
         password: str,
         avatar: str | None = None,
         is_admin: bool = False,
+        is_system: bool = False,
     ) -> "UserDoc":
         """
         Creates a new user with the given username, email and password.
@@ -54,6 +56,7 @@ class UserDoc(Document):
             password=password,
             avatar=avatar,
             is_admin=is_admin,
+            is_system=is_system,
         )
         await user_doc.insert()
         return user_doc
@@ -96,6 +99,7 @@ class User(BaseModel):
     password: str
     avatar: str | None = None
     is_admin: bool
+    is_system: bool
 
     class Config:
         allow_population_by_field_name = True

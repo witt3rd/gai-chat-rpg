@@ -41,7 +41,6 @@ class MessageDoc(Document):
         sender: PydanticObjectId,
         content: str,
         target: PydanticObjectId | None = None,
-        is_private: bool = False,
         is_edited: bool = False,
     ) -> "MessageDoc":
         """
@@ -52,7 +51,6 @@ class MessageDoc(Document):
             sender=sender,
             target=target,
             content=content,
-            is_private=is_private,
             is_edited=is_edited,
         )
         await message_doc.insert()
@@ -85,7 +83,6 @@ class MessageUpdate(BaseModel):
     sender: PydanticObjectId | None = None
     target: PydanticObjectId | None = None
     content: str | None = None
-    is_private: bool | None = None
 
     class Config:
         arbitrary_types_allowed = True
@@ -103,7 +100,6 @@ class Message(BaseModel):
     sender: PydanticObjectId
     target: PydanticObjectId | None
     content: str
-    is_private: bool
     is_edited: bool
 
     class Config:

@@ -11,7 +11,6 @@ Name | Type | Description | Notes
 **sender** | **object** |  | 
 **target** | **object** |  | [optional] 
 **content** | **object** |  | 
-**is_private** | **object** |  | 
 **is_edited** | **object** |  | 
 
 ## Example

@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **password** | **object** |  | 
 **avatar** | **object** |  | [optional] 
 **is_admin** | **object** |  | 
+**is_system** | **object** |  | 
 
 ## Example
 

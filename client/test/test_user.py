@@ -44,7 +44,8 @@ class TestUser(unittest.TestCase):
                 email = None, 
                 password = None, 
                 avatar = None, 
-                is_admin = None
+                is_admin = None, 
+                is_system = None
             )
         else :
             return User(
@@ -54,6 +55,7 @@ class TestUser(unittest.TestCase):
                 email = None,
                 password = None,
                 is_admin = None,
+                is_system = None,
         )
         """
 

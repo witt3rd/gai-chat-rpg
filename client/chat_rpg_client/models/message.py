@@ -31,9 +31,8 @@ class Message(BaseModel):
     sender: Optional[Any] = Field(...)
     target: Optional[Any] = None
     content: Optional[Any] = Field(...)
-    is_private: Optional[Any] = Field(...)
     is_edited: Optional[Any] = Field(...)
-    __properties = ["_id", "timestamp", "campaign", "sender", "target", "content", "is_private", "is_edited"]
+    __properties = ["_id", "timestamp", "campaign", "sender", "target", "content", "is_edited"]
 
     class Config:
         """Pydantic configuration"""
@@ -89,11 +88,6 @@ class Message(BaseModel):
         if self.content is None and "content" in self.__fields_set__:
             _dict['content'] = None
 
-        # set to None if is_private (nullable) is None
-        # and __fields_set__ contains the field
-        if self.is_private is None and "is_private" in self.__fields_set__:
-            _dict['is_private'] = None
-
         # set to None if is_edited (nullable) is None
         # and __fields_set__ contains the field
         if self.is_edited is None and "is_edited" in self.__fields_set__:
@@ -117,7 +111,6 @@ class Message(BaseModel):
             "sender": obj.get("sender"),
             "target": obj.get("target"),
             "content": obj.get("content"),
-            "is_private": obj.get("is_private"),
             "is_edited": obj.get("is_edited")
         })
         return _obj
