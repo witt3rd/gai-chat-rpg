@@ -58,7 +58,8 @@ def _reset_state() -> None:
     try:
         # Get Users
         users_api = st.session_state.users_api
-        users = [client.User(**user) for user in users_api.get_all_users()]
+        all_users = users_api.get_all_users()
+        users = [client.User.from_dict(user) for user in all_users]
         st.session_state.users = users
     except client.ApiException as exc:
         st.exception(f"Exception when calling UsersApi->get_all_users: {exc}\n")
