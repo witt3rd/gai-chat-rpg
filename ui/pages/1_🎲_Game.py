@@ -17,10 +17,6 @@ from pydantic import BaseModel
 import streamlit as st
 from streamlit.elements.image import AtomicImage
 
-# import asyncio
-import threading
-
-from streamlit.runtime.scriptrunner import add_script_run_ctx
 
 # import websockets
 # import aiohttp
@@ -141,12 +137,14 @@ def _cmd_roll(
             num_dice = int(roll[0])
             num_sides = int(roll[1])
             rolls = [random.randint(1, num_sides) for _ in range(num_dice)]
-            content = f"🎲 {num_dice}d{num_sides}: :orange[{rolls}]"
+            user = st.session_state.user.username
+            content = (
+                f"🎲 :green[**{user}**] rolls {num_dice}d{num_sides}: :orange[{rolls}]"
+            )
         else:
             content = "Invalid roll"
     return CmdResult(
         sender_id=_get_user_by_username("System").id,
-        target_id=st.session_state.user.id,
         content=content,
     )
 
@@ -209,6 +207,21 @@ cmd_dispatch = {
 }
 
 
+def _delete_message(
+    message_id: str,
+) -> None:
+    """
+    Delete a message
+    """
+    messages_api = st.session_state.messages_api
+    messages_api.delete_message(
+        id=message_id,
+    )
+    if "messages" in st.session_state:
+        del st.session_state.messages
+        st.session_state.reset_messages = True
+
+
 def _send_message(
     content: str,
 ) -> None:
@@ -251,7 +264,8 @@ def _send_message(
         message_create=message_create,
     )
 
-    del st.session_state.messages
+    if "messages" in st.session_state:
+        del st.session_state.messages
 
 
 #
@@ -260,11 +274,9 @@ def _send_message(
 
 st.title("🎲 Game")
 
-st.header("Campaigns")
-
 campaign_options = st.session_state.campaigns if "campaigns" in st.session_state else []
 st.selectbox(
-    label="Select a campaign",
+    label="Campaign",
     options=campaign_options,
     index=0,
     key="campaign",
@@ -275,8 +287,9 @@ st.selectbox(
 name = st.session_state.user.username if st.session_state.user else None
 campaign_name = st.session_state.campaign.name if st.session_state.campaign else None
 if name and campaign_name:
-    st.write(f"Greetings {name}!")
-    st.write(f"You are currently playing in the {campaign_name} campaign.")
+    st.write(
+        f"Greetings :green[**{name}**]! You are currently playing in the :blue[**{campaign_name}**] campaign."
+    )
 else:
     st.write("Please select a user and campaign")
     st.stop()
@@ -307,8 +320,10 @@ async def message_worker() -> None:
     if "messages" not in st.session_state:
         st.session_state.messages = []
     else:
-        last_message = st.session_state.messages[-1]
-        since = last_message.timestamp
+        if len(st.session_state.messages) > 0:
+            # Get the timestamp of the last message
+            last_message = st.session_state.messages[-1]
+            since = last_message.timestamp
 
     try:
         messages_api = st.session_state.messages_api
@@ -327,9 +342,15 @@ async def message_worker() -> None:
         st.exception(f"Exception when calling MessagesApi->get_messages: {e}\n")
 
 
+if "message_controls" not in st.session_state:
+    st.session_state.message_controls = False
+if "reset_messages" not in st.session_state:
+    st.session_state.reset_messages = False
+
 # Render messages
 if "messages" in st.session_state:
     system_user = _get_user_by_username("System")
+
     with st.container():
         for message in st.session_state.messages:
             # Only show messages that are public or private to the user
@@ -349,14 +370,14 @@ if "messages" in st.session_state:
                     sender_display = (
                         f":green[**{sender_name}**]"
                         if message.sender == user_id
-                        else f"**{sender_name}**"
+                        else f":blue[**{sender_name}**]"
                     )
 
                 target_name = _get_user_name(message.target)
                 target_display = (
                     f":green[**{target_name}**]"
                     if message.target == user_id
-                    else f"**{target_name}**"
+                    else f":blue[**{target_name}**]"
                 )
 
                 # Parse the timestamp string into a datetime object
@@ -382,10 +403,26 @@ if "messages" in st.session_state:
                     st.write(f"{sender_display} {time_display}")
                 st.write(message.content)
 
+                if st.session_state.message_controls:
+                    if st.button("Delete", key=f"delete_{message.id}"):
+                        _delete_message(message.id)
 
 prompt = st.chat_input("Speak!")
 if prompt:
     _send_message(prompt)
+
+#
+# Sidebar UI
+#
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("## Game Controls")
+if st.sidebar.button("🎲 Roll 1d20"):
+    _send_message("/roll 1d20")
+st.sidebar.checkbox("Message Controls", key="message_controls")
+#
+# Main
+#
 
 
 async def main() -> NoReturn:
