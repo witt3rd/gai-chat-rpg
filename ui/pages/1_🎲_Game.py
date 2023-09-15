@@ -7,7 +7,6 @@ from datetime import datetime
 import locale
 import os
 import random
-import random as r
 from typing import NoReturn
 
 # # # Packages # # #
@@ -22,6 +21,7 @@ from streamlit.elements.image import AtomicImage
 # import aiohttp
 
 # # # Project # # #
+import ui.ai as ai
 from ui.sidebar import show_sidebar
 
 #
@@ -168,12 +168,20 @@ def _cmd_dm(
             else:
                 target_username = details[1:first_space]
                 content = details[first_space:].strip()
-                target = _get_user_by_username(target_username)
-                if not target:
-                    content = f"User :blue[@{target_username}] not found"
+
+                if target_username == "gpt4":
+                    # Ask GPT-4
+                    chat_model = ai.get_chat_model()
+                    content = ai.ask_gpt(chat_model, content)
+                    sender_id = _get_user_by_username("GPT4").id
+                    target_id = st.session_state.user.id
                 else:
-                    target_id = target.id
-                    sender_id = st.session_state.user.id
+                    target = _get_user_by_username(target_username)
+                    if not target:
+                        content = f"User :blue[@{target_username}] not found"
+                    else:
+                        target_id = target.id
+                        sender_id = st.session_state.user.id
     return CmdResult(
         sender_id=sender_id,
         target_id=target_id,

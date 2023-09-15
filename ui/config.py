@@ -31,6 +31,7 @@ class Config:
     A dataclass for managing configuration settings.
     """
 
+    openai_api_key: str
     server_url: str
     server_socket: str
     cookie_name: str
@@ -55,6 +56,7 @@ def get_config() -> Config:
         'my_secret_api_key'
     """
     return Config(
+        openai_api_key=os.getenv("OPENAI_API_KEY", "BAD KEY"),
         server_url=os.getenv("SERVER_URL", "http://localhost:8080"),
         server_socket=os.getenv("SERVER_SOCKET", "ws://localhost:8081"),
         cookie_name=os.getenv("COOKIE_NAME", "chatrpg"),
